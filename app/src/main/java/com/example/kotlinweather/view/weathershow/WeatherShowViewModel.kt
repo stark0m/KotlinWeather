@@ -21,7 +21,7 @@ class WeatherShowViewModel(
         return vmLiveData
     }
 
-    override fun getData() {
+    fun getData() {
         chooseRepository()
 
         vmLiveData.value = AppState.Loading
@@ -29,11 +29,11 @@ class WeatherShowViewModel(
         repository!!.getWeather(55.755826, 37.617299900000035, object : WeatherCallBack<Weather> {
             override fun onDataReceived(result: Weather) {
                 if (isWeatherReceived(result)) {
-                    vmLiveData.value = AppState.Success(result)
+                    vmLiveData.postValue(AppState.Success(result))
 
                 } else {
-                    vmLiveData.value =
-                        AppState.Error(throw IllegalStateException("Данные не были получены из препозитория"))
+                    vmLiveData.postValue(AppState.Error(throw IllegalStateException("Данные не были получены из препозитория")))
+
                 }
             }
 

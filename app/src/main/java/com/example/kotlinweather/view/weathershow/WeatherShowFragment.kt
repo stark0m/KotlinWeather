@@ -33,29 +33,30 @@ class WeatherShowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModelWeatherShow = ViewModelProvider(this).get(WeatherShowViewModel::class.java)
-        viewModelWeatherShow.getObserver().observe(viewLifecycleOwner) {
-
-            when (it) {
-                is AppState.Error -> {
-
-                    binding.progress.visibility = View.GONE
-                    Snackbar
-                        .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                        .setAction("Reload") { viewModelWeatherShow.getData() }
-                        .show()
-                }
-                AppState.Loading -> {
-                    binding.progress.visibility = View.VISIBLE
-                }
-                is AppState.Success -> {
-                    binding.progress.visibility = View.GONE
-                    Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
-                }
-            }
-        }
+        viewModelWeatherShow.getObserver().observe(viewLifecycleOwner) { showData(it) }
         viewModelWeatherShow.getData()
 
 
+    }
+
+    private fun showData(state: AppState) {
+        when (state) {
+            is AppState.Error -> {
+
+                binding.progress.visibility = View.GONE
+                Snackbar
+                    .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Reload") { viewModelWeatherShow.getData() }
+                    .show()
+            }
+            AppState.Loading -> {
+                binding.progress.visibility = View.VISIBLE
+            }
+            is AppState.Success -> {
+                binding.progress.visibility = View.GONE
+                Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onDestroyView() {
