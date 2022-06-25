@@ -23,7 +23,7 @@ class WeatherShowViewModel(
         return vmLiveData
     }
 
-    fun getData() {
+    override fun getData() {
         chooseRepository()
 
         vmLiveData.value = AppState.Loading
