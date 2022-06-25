@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 
 class WeatherShowFragment : Fragment() {
+    private var _binding: WeatherShowFragmentBinding? = null
+    private val binding         get() = _binding!!
 
     companion object {
         fun newInstance() = WeatherShowFragment()
@@ -19,7 +22,9 @@ class WeatherShowFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.weather_show_fragment, container, false)
+        _binding = WeatherShowFragmentBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -28,4 +33,8 @@ class WeatherShowFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
