@@ -9,9 +9,11 @@ import com.example.kotlinweather.model.RepositoryNetworkImpl
 import com.example.kotlinweather.model.WeatherCallBack
 import com.example.kotlinweather.viewmodel.AppState
 import com.example.kotlinweather.viewmodel.ViewModelInterface
+import java.lang.Thread.sleep
+import kotlin.concurrent.thread
 
 class WeatherShowViewModel(
-    private val vmLiveData: MutableLiveData<AppState> = MutableLiveData()
+    private val vmLiveData: MutableLiveData<AppState> = MutableLiveData<AppState>()
 ) : ViewModel(), ViewModelInterface {
     var repository: Repository? = null
 
@@ -32,7 +34,7 @@ class WeatherShowViewModel(
                     vmLiveData.postValue(AppState.Success(result))
 
                 } else {
-                    vmLiveData.postValue(AppState.Error(throw IllegalStateException("Данные не были получены из препозитория")))
+                    vmLiveData.postValue(AppState.Error(Any()))
 
                 }
             }
@@ -44,7 +46,7 @@ class WeatherShowViewModel(
 
     }
 
-    private fun isWeatherReceived(any: Any): Boolean = (0..5).random() == 1
+    private fun isWeatherReceived(any: Any): Boolean = (0..3).random() != 1
 
     private fun chooseRepository() {
         repository = if (isConnected()) {

@@ -14,8 +14,9 @@ class RepositoryLocalImpl : Repository {
 
         thread {
             sleep(2000L)
-            weather.onDataReceived(Weather(getDefaultCity()))
+            weather.onDataReceived(Weather(getDefaultCity(), temperature = 12, feelsLike = 9))
         }.start()
+
 
     }
 }

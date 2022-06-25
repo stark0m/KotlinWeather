@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
+import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
 
@@ -54,9 +55,18 @@ class WeatherShowFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.progress.visibility = View.GONE
+                redrawWeather(state.weatherData)
                 Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun redrawWeather(weatherData: Weather) {
+        val result = weatherData
+        binding.cityName.text = result.city.name
+        binding.temperatureValue.text = result.temperature.toString()
+        binding.feelsLikeValue.text = result.feelsLike.toString()
+        binding.cityCoordinates.text = "${result.city.lat}/${result.city.lon}"
     }
 
     override fun onDestroyView() {
