@@ -11,11 +11,15 @@ import com.example.kotlinweather.viewmodel.AppState
 import com.example.kotlinweather.viewmodel.ViewModelInterface
 
 class WeatherShowViewModel(
-    private val vmLiveData: MutableLiveData<Any> = MutableLiveData()
+    private val vmLiveData: MutableLiveData<AppState> = MutableLiveData()
 ) : ViewModel(), ViewModelInterface {
     var repository: Repository? = null
 
     private fun isConnected() = false
+
+    fun getObserver():MutableLiveData<AppState>{
+        return vmLiveData
+    }
 
     override fun getData() {
         chooseRepository()
@@ -26,6 +30,7 @@ class WeatherShowViewModel(
             override fun onDataReceived(result: Weather) {
                 if (isWeatherReceived(result)) {
                     vmLiveData.value = AppState.Success(result)
+
                 } else {
                     vmLiveData.value =
                         AppState.Error(throw IllegalStateException("Данные не были получены из препозитория"))
