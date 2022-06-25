@@ -1,4 +1,4 @@
-package com.example.kotlinweather
+package com.example.kotlinweather.view
 
 import androidx.lifecycle.ViewModel
 

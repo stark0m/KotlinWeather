@@ -1,4 +1,4 @@
-package com.example.kotlinweather.domain
+package com.example.kotlinweather.viewmodel
 
 sealed class AppState {
     data class Success(val weatherData: Any) : AppState()

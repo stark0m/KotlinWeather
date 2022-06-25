@@ -1,4 +1,4 @@
-package com.example.kotlinweather
+package com.example.kotlinweather.view
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -27,9 +27,11 @@ class WeatherShowFragment : Fragment() {
         return view
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModelWeatherShow = ViewModelProvider(this).get(WeatherShowViewModel::class.java)
+
 
     }
 
