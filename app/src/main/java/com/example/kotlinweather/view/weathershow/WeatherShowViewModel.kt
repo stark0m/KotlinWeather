@@ -3,6 +3,7 @@ package com.example.kotlinweather.view.weathershow
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.domain.getDefaultCity
 import com.example.kotlinweather.model.Repository
 import com.example.kotlinweather.model.RepositoryLocalImpl
 import com.example.kotlinweather.model.RepositoryNetworkImpl
@@ -45,6 +46,9 @@ class WeatherShowViewModel(
 
 
     }
+
+
+
 
     private fun isWeatherReceived(any: Any): Boolean = (0..3).random() != 1
 
