@@ -61,13 +61,7 @@ class WeatherShowFragment : Fragment() {
         }
     }
 
-    private fun redrawWeather(weatherData: Weather) {
-        val result = weatherData
-        binding.cityName.text = result.city.name
-        binding.temperatureValue.text = result.temperature.toString()
-        binding.feelsLikeValue.text = result.feelsLike.toString()
-        binding.cityCoordinates.text = "${result.city.lat}/${result.city.lon}"
-    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
