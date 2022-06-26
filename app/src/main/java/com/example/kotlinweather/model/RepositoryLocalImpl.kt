@@ -8,7 +8,6 @@ import kotlin.concurrent.thread
 
 class RepositoryLocalImpl : Repository {
     override fun getWeatherLIst(weatherList: WeatherCallBack<List<Weather>>) {
-
         thread {
             sleep(2000L)
             weatherList.onDataReceived(getWorldCities())

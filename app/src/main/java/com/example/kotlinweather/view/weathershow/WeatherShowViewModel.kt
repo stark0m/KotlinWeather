@@ -1,5 +1,7 @@
 package com.example.kotlinweather.view.weathershow
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlinweather.domain.Weather
@@ -29,18 +31,27 @@ class WeatherShowViewModel(
 
         vmLiveData.value = AppState.Loading
 
-        repository!!.getWeather(55.755826, 37.617299900000035, object : WeatherCallBack<Weather> {
-            override fun onDataReceived(result: Weather) {
-                if (isWeatherReceived(result)) {
-                    vmLiveData.postValue(AppState.Success(result))
+        repository!!.getWeatherLIst { result ->
+            if (isWeatherReceived(result)) {
+                vmLiveData.postValue(AppState.ReceivedCityListSuccess(result))
+                Log.i("@@@@", result.toString())
+            } else {
+                vmLiveData.postValue(AppState.Error(Any()))
 
-                } else {
-                    vmLiveData.postValue(AppState.Error(Any()))
-
-                }
             }
-
-        })
+        }
+//        repository!!.getWeather(55.755826, 37.617299900000035, object : WeatherCallBack<Weather> {
+//            override fun onDataReceived(result: Weather) {
+//                if (isWeatherReceived(result)) {
+//                    vmLiveData.postValue(AppState.Success(result))
+//
+//                } else {
+//                    vmLiveData.postValue(AppState.Error(Any()))
+//
+//                }
+//            }
+//
+//        })
 
 
 
@@ -50,7 +61,7 @@ class WeatherShowViewModel(
 
 
 
-    private fun isWeatherReceived(any: Any): Boolean = (0..3).random() != 1
+    private fun isWeatherReceived(any: Any): Boolean = (0..5).random() != 1
 
     private fun chooseRepository() {
         repository = if (isConnected()) {

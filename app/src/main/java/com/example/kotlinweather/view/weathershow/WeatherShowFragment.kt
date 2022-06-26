@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.viewmodel.AppState
@@ -17,6 +19,10 @@ class WeatherShowFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var recyclerAdapter:CityListRecyclerAdapter
     private lateinit var viewModelWeatherShow: WeatherShowViewModel
+
+
+
+
     companion object {
         fun newInstance() = WeatherShowFragment()
     }
@@ -39,6 +45,15 @@ class WeatherShowFragment : Fragment() {
         viewModelWeatherShow.getObserver().observe(viewLifecycleOwner) { showData(it) }
         viewModelWeatherShow.getData()
 
+        initRecyclerVIew()
+
+
+    }
+
+    private fun initRecyclerVIew() {
+        recyclerAdapter = CityListRecyclerAdapter(listOf()){}
+        binding.idRecyclerView.adapter = recyclerAdapter
+        binding.idRecyclerView.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
     }
 
@@ -62,7 +77,8 @@ class WeatherShowFragment : Fragment() {
             }
             is AppState.ReceivedCityListSuccess -> {
                 updateCityList(state.cityList)
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.visibility = View.GONE
+                Snackbar.make(binding.mainView, "Success loaded list", Snackbar.LENGTH_LONG).show()
             }
         }
 
@@ -74,6 +90,7 @@ class WeatherShowFragment : Fragment() {
             Toast.makeText(requireContext(), "CLICKED $it", Toast.LENGTH_SHORT).show()
         }
 
+        recyclerAdapter.notifyDataSetChanged()
     }
 
 
