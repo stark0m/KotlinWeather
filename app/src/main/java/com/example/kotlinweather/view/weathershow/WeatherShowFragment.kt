@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.viewmodel.AppState
@@ -14,12 +15,13 @@ import com.google.android.material.snackbar.Snackbar
 class WeatherShowFragment : Fragment() {
     private var _binding: WeatherShowFragmentBinding? = null
     private val binding get() = _binding!!
-
+    lateinit var recyclerAdapter:CityListRecyclerAdapter
+    private lateinit var viewModelWeatherShow: WeatherShowViewModel
     companion object {
         fun newInstance() = WeatherShowFragment()
     }
 
-    private lateinit var viewModelWeatherShow: WeatherShowViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,12 +57,24 @@ class WeatherShowFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.progress.visibility = View.GONE
-                redrawWeather(state.weatherData)
+//                redrawWeather(state.weatherData)
                 Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
             }
+            is AppState.ReceivedCityListSuccess -> {
+                updateCityList(state.cityList)
+                binding.progress.visibility = View.VISIBLE
+            }
         }
+
+
     }
 
+    private fun updateCityList(list:List<Weather>){
+        recyclerAdapter = CityListRecyclerAdapter(list){
+            Toast.makeText(requireContext(), "CLICKED $it", Toast.LENGTH_SHORT).show()
+        }
+
+    }
 
 
     override fun onDestroyView() {
