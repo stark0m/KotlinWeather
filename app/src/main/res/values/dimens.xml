@@ -7,5 +7,6 @@
     <dimen name="card_margin">5dp</dimen>
     <dimen name="card_radius">20dp</dimen>
     <dimen name="card_inner_padding">5dp</dimen>
+    <dimen name="float_button_margin">20dp</dimen>
 
 </resources>

@@ -51,7 +51,15 @@ class WeatherShowViewModel(
     private fun hasOutSideImplCityListRepository() = false
 
     override fun tryToShowWeather(weather: Weather) {
+        vmLiveData.value = AppState.Loading
         vmLiveData.value = AppState.ShowWeater(weather)
+    }
+
+    override fun getAnotherCityList() {
+        vmLiveData.value = AppState.Loading
+        cityListRepository!!.getNextCityList(){
+            vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
+        }
     }
 
 
