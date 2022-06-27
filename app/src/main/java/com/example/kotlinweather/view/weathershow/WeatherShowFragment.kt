@@ -32,7 +32,7 @@ class WeatherShowFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = WeatherShowFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
