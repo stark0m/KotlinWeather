@@ -26,7 +26,7 @@ class WeatherShowViewModel(
         return vmLiveData
     }
 
-    override fun getData() {
+    override fun getWeatherList() {
         chooseRepository()
 
         vmLiveData.value = AppState.Loading
@@ -40,25 +40,11 @@ class WeatherShowViewModel(
 
             }
         }
-//        repository!!.getWeather(55.755826, 37.617299900000035, object : WeatherCallBack<Weather> {
-//            override fun onDataReceived(result: Weather) {
-//                if (isWeatherReceived(result)) {
-//                    vmLiveData.postValue(AppState.Success(result))
-//
-//                } else {
-//                    vmLiveData.postValue(AppState.Error(Any()))
-//
-//                }
-//            }
-//
-//        })
-
-
-
-
     }
 
-
+    override fun tryToShowWeather(weather: Weather) {
+        vmLiveData.value= AppState.ShowWeater(weather)
+    }
 
 
     private fun isWeatherReceived(any: Any): Boolean = (0..5).random() != 1

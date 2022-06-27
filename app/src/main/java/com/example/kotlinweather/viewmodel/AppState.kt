@@ -6,5 +6,6 @@ sealed class AppState {
     data class Success(val weatherData: Weather) : AppState()
     data class ReceivedCityListSuccess(val cityList: List<Weather>) : AppState()
     data class Error(val error: Any) : AppState()
+    data class ShowWeater(val weather: Weather) : AppState()
     object Loading : AppState()
 }

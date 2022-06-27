@@ -39,4 +39,7 @@ class OneCityWeatherViewDialog(val weather: Weather) : BottomSheetDialogFragment
         cityCoordinates.text = "${weather.city.lat}/${weather.city.lon}"
 
     }
+    companion object{
+        const val TAG="OneCityWeatherViewDialog"
+    }
 }

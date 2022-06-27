@@ -6,11 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.view.onecityview.OneCityWeatherViewDialog
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
 
@@ -43,7 +43,7 @@ class WeatherShowFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModelWeatherShow = ViewModelProvider(this).get(WeatherShowViewModel::class.java)
         viewModelWeatherShow.getObserver().observe(viewLifecycleOwner) { showData(it) }
-        viewModelWeatherShow.getData()
+        viewModelWeatherShow.getWeatherList()
 
         initRecyclerVIew()
 
@@ -64,7 +64,7 @@ class WeatherShowFragment : Fragment() {
                 binding.progress.visibility = View.GONE
                 Snackbar
                     .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModelWeatherShow.getData() }
+                    .setAction("Reload") { viewModelWeatherShow.getWeatherList() }
                     .show()
             }
             AppState.Loading -> {
@@ -72,7 +72,6 @@ class WeatherShowFragment : Fragment() {
             }
             is AppState.Success -> {
                 binding.progress.visibility = View.GONE
-//                redrawWeather(state.weatherData)
                 Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
             }
             is AppState.ReceivedCityListSuccess -> {
@@ -80,17 +79,20 @@ class WeatherShowFragment : Fragment() {
                 binding.progress.visibility = View.GONE
                 Snackbar.make(binding.mainView, "Success loaded list", Snackbar.LENGTH_LONG).show()
             }
+            is AppState.ShowWeater -> {
+                val modalBottomSheet = OneCityWeatherViewDialog(state.weather)
+                modalBottomSheet.show(parentFragmentManager, OneCityWeatherViewDialog.TAG)
+            }
         }
 
 
     }
 
     private fun updateCityList(list:List<Weather>){
-        recyclerAdapter = CityListRecyclerAdapter(list){
-            Toast.makeText(requireContext(), "CLICKED $it", Toast.LENGTH_SHORT).show()
+        val clickWeatherListener = ChooseCity { weather ->
+            viewModelWeatherShow.tryToShowWeather(weather)
         }
-
-        recyclerAdapter.notifyDataSetChanged()
+        binding.idRecyclerView.adapter = CityListRecyclerAdapter(list,clickWeatherListener)
     }
 
 
