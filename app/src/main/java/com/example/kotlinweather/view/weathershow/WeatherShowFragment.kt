@@ -76,11 +76,14 @@ class WeatherShowFragment : Fragment() {
         when (state) {
             is AppState.Error -> {
 
+
+                    Snackbar
+                        .make(binding.mainView, state.error.message.toString(), Snackbar.LENGTH_INDEFINITE)
+                        .setAction("Reload") { viewModelWeatherShow.getWeatherList() }
+                        .show()
+
                 binding.progress.visibility = View.GONE
-                Snackbar
-                    .make(binding.mainView, "Error", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Reload") { viewModelWeatherShow.getWeatherList() }
-                    .show()
+
             }
             AppState.Loading -> {
                 binding.progress.visibility = View.VISIBLE

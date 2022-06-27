@@ -34,7 +34,7 @@ class WeatherShowViewModel(
             if (isWeatherReceived(result)) {
                 vmLiveData.postValue(AppState.ReceivedCityListSuccess(result))
             } else {
-                vmLiveData.postValue(AppState.Error(Any()))
+                vmLiveData.postValue(AppState.Error(IllegalStateException("ошибка загрузки списка городов с сервера")))
 
             }
         }
