@@ -1,4 +1,4 @@
-package com.example.kotlinweather.view.onecityview
+package com.example.kotlinweather.view.onecityview.dialog_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +11,7 @@ import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-/**
- * не нашел как надуть binding
- * OneCityWeatherViewDialogBinding нет такого класса
- */
+
 private var _binding: WeatherOneCityShowDialogBinding? = null
 private val binding get() = _binding!!
 class OneCityWeatherViewDialog(val weather: Weather) : BottomSheetDialogFragment() {
