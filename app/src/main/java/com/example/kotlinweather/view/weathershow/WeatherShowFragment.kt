@@ -20,7 +20,9 @@ class WeatherShowFragment : Fragment() {
     private var _binding: WeatherShowFragmentBinding? = null
     private val binding get() = _binding!!
     lateinit var recyclerAdapter:CityListRecyclerAdapter
-    private lateinit var viewModelWeatherShow: WeatherShowViewModel
+    private val viewModelWeatherShow: WeatherShowViewModel by lazy {
+        ViewModelProvider(this).get(WeatherShowViewModel::class.java)
+    }
     lateinit var clickWeatherListener:ChooseCity
 
 
@@ -43,7 +45,7 @@ class WeatherShowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModelWeatherShow = ViewModelProvider(this).get(WeatherShowViewModel::class.java)
+
         viewModelWeatherShow.getObserver().observe(viewLifecycleOwner) { showData(it) }
         viewModelWeatherShow.getWeatherList()
 

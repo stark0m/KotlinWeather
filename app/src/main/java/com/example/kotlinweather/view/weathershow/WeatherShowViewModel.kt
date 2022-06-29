@@ -57,13 +57,28 @@ class WeatherShowViewModel(
 
     override fun getAnotherCityList() {
         vmLiveData.value = AppState.Loading
-        cityListRepository!!.getNextCityList(){
+        cityListRepository!!.getNextCityList() {
             vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
         }
     }
 
     override fun updateWeatherInfo(weather: Weather) {
-        TODO("Not yet implemented")
+        chooseRepository()
+        when (repository) {
+            is RepositoryLocalImpl -> vmLiveData.postValue(AppState.Error(IllegalAccessException("Подключкение к сети отсутсвует")))
+            else -> {
+                repository?.getWeather(
+                    lat = weather.city.lat,
+                    lon = weather.city.lon
+                ) { weatherFromRepository ->
+                    vmLiveData.postValue(AppState.UpdateWeatherInfo(weatherFromRepository))
+                }
+                    ?: vmLiveData.postValue(AppState.Error(IllegalAccessException("Не выбран репозиторий для доступа к данным updateWeatherInfo(weather: Weather)")))
+
+            }
+        }
+
+
     }
 
 
