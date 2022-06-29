@@ -9,11 +9,11 @@ import kotlin.concurrent.thread
 class RepositoryLocalImpl : Repository {
 
 
-    override fun getWeather(lat: Double, lon: Double, weather: WeatherCallBack<Weather>) {
+    override fun getWeather(lat: Double, lon: Double, weather: WeatherCallBack<Weather?>) {
 
         thread {
             sleep(2000L)
-            weather.onDataReceived(Weather(getDefaultCity(), temperature = 12, feelsLike = 9))
+            weather.onDataReceived(null)
         }.start()
 
 

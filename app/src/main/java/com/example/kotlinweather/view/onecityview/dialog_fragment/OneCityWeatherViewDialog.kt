@@ -14,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 private var _binding: WeatherOneCityShowDialogBinding? = null
 private val binding get() = _binding!!
+
 class OneCityWeatherViewDialog(val weather: Weather) : BottomSheetDialogFragment() {
 
 
@@ -27,17 +28,20 @@ class OneCityWeatherViewDialog(val weather: Weather) : BottomSheetDialogFragment
         return view
 
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.cityName.text = weather.city.name
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelsLike.toString()
-        binding.cityCoordinates.text = "${weather.city.lat}/${weather.city.lon}"
+        binding.apply {
+            cityName.text = weather.city.name
+            temperatureValue.text = weather.temperature.toString()
+            feelsLikeValue.text = weather.feelsLike.toString()
+            cityCoordinates.text = "${weather.city.lat}/${weather.city.lon}"
+        }
 
     }
-    companion object{
-        const val TAG="OneCityWeatherViewDialog"
+
+    companion object {
+        const val TAG = "OneCityWeatherViewDialog"
     }
 
     override fun onDestroy() {

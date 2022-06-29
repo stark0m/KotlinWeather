@@ -11,7 +11,6 @@ import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
-import java.io.IOError
 import java.io.IOException
 
 
@@ -41,12 +40,19 @@ class OneCItyWeatherViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         showRecievedWeather(weatherToShow)
+        initObserverFromViewModel()
+        sendRequestToUpdateCurrentCityWeatherInfo()
+    }
+
+    private fun sendRequestToUpdateCurrentCityWeatherInfo() {
+        viewModelWeatherShow.updateWeatherInfo(weatherToShow)
+    }
+
+    private fun initObserverFromViewModel() {
         viewModelWeatherShow.getObserver()
             .observe(viewLifecycleOwner) {
                 makeAction(it)
             }
-        viewModelWeatherShow.updateWeatherInfo(weatherToShow)
-
     }
 
     private fun makeAction(appState: AppState) {

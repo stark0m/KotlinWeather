@@ -33,8 +33,7 @@ class CityListRecyclerAdapter(private val dataList:List<Weather>, private val ca
         }
     }
 
-    override fun getItemCount(): Int {
-       return dataList.size
-    }
+    override fun getItemCount() = dataList.size
+
 }
 

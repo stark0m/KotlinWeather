@@ -9,6 +9,7 @@ import com.example.kotlinweather.domain.getDefaultCity
 import com.example.kotlinweather.model.*
 import com.example.kotlinweather.viewmodel.AppState
 import com.example.kotlinweather.viewmodel.ViewModelInterface
+import java.lang.NullPointerException
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
@@ -35,7 +36,6 @@ class WeatherShowViewModel(
                 vmLiveData.postValue(AppState.ReceivedCityListSuccess(result))
             } else {
                 vmLiveData.postValue(AppState.Error(IllegalStateException("ошибка загрузки списка городов с сервера")))
-
             }
         }
     }
@@ -64,21 +64,15 @@ class WeatherShowViewModel(
 
     override fun updateWeatherInfo(weather: Weather) {
         chooseRepository()
-        when (repository) {
-            is RepositoryLocalImpl -> vmLiveData.postValue(AppState.Error(IllegalAccessException("Подключкение к сети отсутсвует")))
-            else -> {
-                repository?.getWeather(
-                    lat = weather.city.lat,
-                    lon = weather.city.lon
-                ) { weatherFromRepository ->
-                    vmLiveData.postValue(AppState.UpdateWeatherInfo(weatherFromRepository))
-                }
-                    ?: vmLiveData.postValue(AppState.Error(IllegalAccessException("Не выбран репозиторий для доступа к данным updateWeatherInfo(weather: Weather)")))
+        repository?.getWeather(
+            lat = weather.city.lat,
+            lon = weather.city.lon
+        ) { weatherFromRepository ->
+            weatherFromRepository?.let {
+                vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
+            }?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
 
-            }
         }
-
-
     }
 
 
