@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.view.onecityview.OneCityWeatherViewDialog
+import com.example.kotlinweather.view.onecityview.base_fragment.OneCItyWeatherViewFragment
+import com.example.kotlinweather.view.onecityview.dialog_fragment.OneCityWeatherViewDialog
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
 
@@ -98,10 +100,20 @@ class WeatherShowFragment : Fragment() {
                 Snackbar.make(binding.mainView, "Success loaded list", Snackbar.LENGTH_LONG).show()
             }
             is AppState.ShowWeater -> {
-                val modalBottomSheet = OneCityWeatherViewDialog(state.weather)
                 binding.progress.visibility = View.GONE
-                modalBottomSheet.show(parentFragmentManager, OneCityWeatherViewDialog.TAG)
+
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .hide(this)
+                    .add(R.id.container,OneCItyWeatherViewFragment.newInstance(state.weather))
+                    .addToBackStack("")
+                    .commit()
+
+            //                val modalBottomSheet = OneCityWeatherViewDialog(state.weather)
+//                modalBottomSheet.show(parentFragmentManager, OneCityWeatherViewDialog.TAG)
             }
+
+            else -> {}
         }
 
 

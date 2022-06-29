@@ -62,6 +62,10 @@ class WeatherShowViewModel(
         }
     }
 
+    override fun updateWeatherInfo(weather: Weather) {
+        TODO("Not yet implemented")
+    }
+
 
     private fun isWeatherReceived(any: Any): Boolean = (0..5).random() != 1
 

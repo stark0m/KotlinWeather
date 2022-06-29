@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.R
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.view.onecityview.OneCityWeatherViewDialog
 
 class CityListRecyclerAdapter(private val dataList:List<Weather>, private val callback: ChooseCity):RecyclerView.Adapter<CityListRecyclerAdapter.WeatherViewHolder>() {
     inner class WeatherViewHolder(view: View):RecyclerView.ViewHolder(view){
