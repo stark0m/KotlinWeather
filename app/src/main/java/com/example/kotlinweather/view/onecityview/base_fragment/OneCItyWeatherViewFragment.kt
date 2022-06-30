@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.example.kotlinweather.databinding.FragmentOneCItyWeatherViewBinding
+import com.example.kotlinweather.databinding.WeatherOneCityShowDialogBinding
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
 import com.example.kotlinweather.viewmodel.AppState
@@ -18,7 +18,7 @@ private const val TAG_WEATHER_TO_SHOW = "TAG_WEATHER_TO_SHOW"
 
 
 class OneCItyWeatherViewFragment : Fragment() {
-    private var _binding: FragmentOneCItyWeatherViewBinding? = null
+    private var _binding: WeatherOneCityShowDialogBinding? = null
     private val binding get() = _binding!!
     private lateinit var weatherToShow: Weather
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
@@ -92,7 +92,7 @@ class OneCItyWeatherViewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentOneCItyWeatherViewBinding.inflate(inflater, container, false)
+        _binding = WeatherOneCityShowDialogBinding.inflate(inflater, container, false)
         return binding.root
     }
 
