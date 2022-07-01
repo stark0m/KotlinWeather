@@ -5,7 +5,10 @@ import com.example.kotlinweather.domain.Weather
 import kotlin.concurrent.thread
 
 class CityListRepositoryHardLocalImpl:CityListRepository {
-    private var indicator = false
+
+        private var indicator =false
+
+
     override fun getCityList(weatherList: WeatherCallBack<List<Weather>>) {
         thread {
             Thread.sleep(2000L)
@@ -14,6 +17,7 @@ class CityListRepositoryHardLocalImpl:CityListRepository {
     }
 
     override fun getNextCityList(weatherList: WeatherCallBack<List<Weather>>) {
+        indicator=!indicator
         thread {
             Thread.sleep(1000L)
         if (indicator) {
@@ -22,7 +26,7 @@ class CityListRepositoryHardLocalImpl:CityListRepository {
        } else{
            weatherList.onDataReceived(getWorldCities())
        }
-            indicator=!indicator
+
         }.start()
 
     }

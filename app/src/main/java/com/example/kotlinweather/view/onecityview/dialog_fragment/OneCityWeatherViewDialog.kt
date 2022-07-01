@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherOneCityShowDialogBinding
-import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

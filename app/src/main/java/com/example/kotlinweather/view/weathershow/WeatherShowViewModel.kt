@@ -1,17 +1,11 @@
 package com.example.kotlinweather.view.weathershow
 
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.domain.getDefaultCity
 import com.example.kotlinweather.model.*
 import com.example.kotlinweather.viewmodel.AppState
 import com.example.kotlinweather.viewmodel.ViewModelInterface
-import java.lang.NullPointerException
-import java.lang.Thread.sleep
-import kotlin.concurrent.thread
 
 class WeatherShowViewModel(
     private val vmLiveData: MutableLiveData<AppState> = MutableLiveData<AppState>()
@@ -35,7 +29,7 @@ class WeatherShowViewModel(
             if (isWeatherReceived(result)) {
                 vmLiveData.postValue(AppState.ReceivedCityListSuccess(result))
             } else {
-                vmLiveData.postValue(AppState.Error(IllegalStateException("ошибка загрузки списка городов с сервера")))
+                vmLiveData.postValue(AppState.Error(IllegalStateException("Ошибка загрузки списка городов с сервера")))
             }
         }
     }
@@ -57,9 +51,10 @@ class WeatherShowViewModel(
 
     override fun getAnotherCityList() {
         vmLiveData.value = AppState.Loading
-        cityListRepository!!.getNextCityList() {
+        cityListRepository?.let {
+            it.getNextCityList() {
             vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
-        }
+        } }?:vmLiveData.postValue(AppState.Error(IllegalStateException("Нет возможности загрузить данные")))
     }
 
     override fun updateWeatherInfo(weather: Weather) {

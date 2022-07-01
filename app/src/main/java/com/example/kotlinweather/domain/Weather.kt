@@ -1,8 +1,6 @@
 package com.example.kotlinweather.domain
 
 import android.os.Parcelable
-import androidx.versionedparcelable.ParcelField
-import androidx.versionedparcelable.VersionedParcelize
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
