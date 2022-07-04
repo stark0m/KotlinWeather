@@ -152,7 +152,12 @@ class WeatherShowFragment : Fragment() {
             .setAction(actionText,block)
             .show()
 
+
+
+
     }
+
+
     private fun updateCityList(list: List<Weather>) {
 
         binding.idRecyclerView.adapter = CityListRecyclerAdapter(list, clickWeatherListener)
