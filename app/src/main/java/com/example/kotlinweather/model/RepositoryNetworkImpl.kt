@@ -48,7 +48,7 @@ class RepositoryNetworkImpl : Repository {
                         "X-Yandex-API-Key",
                         WEATHER_API_KEY
                     )
-                    urlConnection.readTimeout = 10000
+                    urlConnection.readTimeout = 5000
                     val bufferedReader =
                         BufferedReader(InputStreamReader(urlConnection.inputStream))
 // преобразование ответа от сервера (JSON) в модель данных
@@ -68,22 +68,19 @@ class RepositoryNetworkImpl : Repository {
                     handler.post { weather.onDataReceived(weatherReceived) }
 
                 } catch (e: Exception) {
-                    Log.e("", "Fail connection", e)
+                    Log.e("@@@@", "Fail connection", e)
                     e.printStackTrace()
+                    handler.post {weather.onDataReceived(null)}
 //Обработка ошибки
                 } finally {
                     urlConnection.disconnect()
                 }
             }).start()
         } catch (e: MalformedURLException) {
-            Log.e("", "Fail URI", e)
+            Log.e("@@@@", "Fail URI", e)
             e.printStackTrace()
 //Обработка ошибки
         }
-
-
-
-        weather.onDataReceived(Weather(getDefaultCity()))
     }
 
 }

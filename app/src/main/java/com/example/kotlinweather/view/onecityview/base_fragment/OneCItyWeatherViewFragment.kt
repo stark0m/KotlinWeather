@@ -60,6 +60,7 @@ class OneCItyWeatherViewFragment : Fragment() {
         when (appState) {
 
             is AppState.UpdateWeatherInfo -> {
+                binding.progress.visibility=View.GONE
                 showRecievedWeather(appState.weather)
                 Snackbar.make(
                     binding.mainView,
@@ -67,7 +68,11 @@ class OneCItyWeatherViewFragment : Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
+            AppState.Loading -> {
+                binding.progress.visibility = View.VISIBLE
+            }
             is AppState.Error -> {
+                binding.progress.visibility = View.GONE
                 Snackbar
                     .make(
                         binding.mainView,

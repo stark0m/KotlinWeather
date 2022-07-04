@@ -13,7 +13,7 @@ class WeatherShowViewModel(
     var repository: Repository? = null
     var cityListRepository: CityListRepository? = null
 
-    private fun isConnected() = false
+    private fun isConnected() = true
 
     fun getObserver(): MutableLiveData<AppState> {
         return vmLiveData
@@ -59,9 +59,12 @@ class WeatherShowViewModel(
 
     override fun updateWeatherInfo(weather: Weather) {
         chooseRepository()
+        vmLiveData.value = AppState.Loading
         repository?.getWeather(
             lat = weather.city.lat,
-            lon = weather.city.lon
+            lon = weather.city.lon,
+            cityName = weather.city.name
+
         ) { weatherFromRepository ->
             weatherFromRepository?.let {
                 vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
