@@ -61,6 +61,11 @@ class OneCItyWeatherViewFragment : Fragment() {
 
             is AppState.UpdateWeatherInfo -> {
                 showRecievedWeather(appState.weather)
+                Snackbar.make(
+                    binding.mainView,
+                    "Данные обновлены",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
             is AppState.Error -> {
                 Snackbar
