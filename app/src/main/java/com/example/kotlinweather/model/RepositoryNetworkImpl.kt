@@ -8,7 +8,6 @@ import com.example.kotlinweather.BuildConfig.WEATHER_API_KEY
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.domain.dto.yandexweatherdto.WeatherData
-import com.example.kotlinweather.domain.getDefaultCity
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
