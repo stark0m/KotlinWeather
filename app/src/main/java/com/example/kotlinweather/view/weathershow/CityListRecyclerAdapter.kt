@@ -3,39 +3,33 @@ package com.example.kotlinweather.view.weathershow
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kotlinweather.R
+import com.example.kotlinweather.databinding.CityItemBinding
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.view.onecityview.OneCityWeatherViewDialog
 
 class CityListRecyclerAdapter(private val dataList:List<Weather>, private val callback: ChooseCity):RecyclerView.Adapter<CityListRecyclerAdapter.WeatherViewHolder>() {
     inner class WeatherViewHolder(view: View):RecyclerView.ViewHolder(view){
-        val cityName: TextView
-        init {
-            cityName = view.findViewById(R.id.id_city_name)
-        }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.city_item, parent, false)
-        return WeatherViewHolder(view)
+        val binding = CityItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return WeatherViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
-        dataList[position].apply {
-            city.also { holder.cityName.text = it.name }
 
-        holder.itemView.setOnClickListener(){
+        val binding = CityItemBinding.bind(holder.itemView)
+        dataList[position].apply {
+            city.also { binding.idCityName.text = it.name }
+
+        binding.root.setOnClickListener(){
             callback.onCityClicked(this)
         }
         }
     }
 
-    override fun getItemCount(): Int {
-       return dataList.size
-    }
+    override fun getItemCount() = dataList.size
+
 }
 

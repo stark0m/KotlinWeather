@@ -5,7 +5,10 @@ import com.example.kotlinweather.domain.Weather
 import kotlin.concurrent.thread
 
 class CityListRepositoryHardLocalImpl:CityListRepository {
-    private var indicator = 1
+
+        private var indicator =false
+
+
     override fun getCityList(weatherList: WeatherCallBack<List<Weather>>) {
         thread {
             Thread.sleep(2000L)
@@ -14,21 +17,21 @@ class CityListRepositoryHardLocalImpl:CityListRepository {
     }
 
     override fun getNextCityList(weatherList: WeatherCallBack<List<Weather>>) {
+        indicator=!indicator
         thread {
             Thread.sleep(1000L)
-        if (indicator==1) {
+        if (indicator) {
            weatherList.onDataReceived(getRussianCities())
-           indicator--
+
        } else{
            weatherList.onDataReceived(getWorldCities())
-           indicator++
        }
+
         }.start()
 
     }
 
-    private fun getWorldCities(): List<Weather> {
-        return listOf(
+    private fun getWorldCities() = listOf(
             Weather(City("Лондон", 51.5085300, -0.1257400), 1, 2),
             Weather(City("Токио", 35.6895000, 139.6917100), 3, 4),
             Weather(City("Париж", 48.8534100, 2.3488000), 5, 6),
@@ -40,10 +43,9 @@ class CityListRepositoryHardLocalImpl:CityListRepository {
             Weather(City("Киев", 50.4501, 30.523400000000038), 17, 18),
             Weather(City("Пекин", 39.90419989999999, 116.40739630000007), 19, 20)
         )
-    }
 
-    private fun getRussianCities(): List<Weather> {
-        return listOf(
+
+    private fun getRussianCities() = listOf(
             Weather(City("Москва", 55.755826, 37.617299900000035), 1, 2),
             Weather(City("Санкт-Петербург", 59.9342802, 30.335098600000038), 3, 3),
             Weather(City("Новосибирск", 55.00835259999999, 82.93573270000002), 5, 6),
@@ -55,5 +57,5 @@ class CityListRepositoryHardLocalImpl:CityListRepository {
             Weather(City("Ростов-на-Дону", 47.2357137, 39.701505), 17, 18),
             Weather(City("Уфа", 54.7387621, 55.972055400000045), 19, 20)
         )
-    }
+
 }
