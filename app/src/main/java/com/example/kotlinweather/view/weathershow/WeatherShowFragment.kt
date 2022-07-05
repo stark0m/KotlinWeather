@@ -20,9 +20,9 @@ class WeatherShowFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var recyclerAdapter: CityListRecyclerAdapter
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
-        ViewModelProvider(this).get(WeatherShowViewModel::class.java)
+        ViewModelProvider(this)[WeatherShowViewModel::class.java]
     }
-    lateinit var clickWeatherListener: ChooseCity
+    private lateinit var clickWeatherListener: ChooseCity
 
 
     companion object {
@@ -60,7 +60,7 @@ class WeatherShowFragment : Fragment() {
             viewModelWeatherShow.tryToShowWeather(weather)
         }
 
-        binding.floatButtonId.setOnClickListener() {
+        binding.floatButtonId.setOnClickListener {
             viewModelWeatherShow.getAnotherCityList()
         }
     }
@@ -79,7 +79,7 @@ class WeatherShowFragment : Fragment() {
 
 
                 binding.progress.visibility = View.GONE
-                binding.root.ShowErrorWithAction(
+                binding.root.showErrorWithAction(
                     R.string.repo_error,
                     Snackbar.LENGTH_INDEFINITE,
                     "Reload"
@@ -132,7 +132,7 @@ class WeatherShowFragment : Fragment() {
     /**
      * перегружаем функцию, теперь возможно передать сюда строковые ресурсы
      */
-    private fun View.ShowErrorWithAction(
+    private fun View.showErrorWithAction(
         message: Int,
         duration: Int,
         actionText: String,

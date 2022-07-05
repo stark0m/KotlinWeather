@@ -8,7 +8,7 @@ import androidx.annotation.RequiresApi
 import com.example.kotlinweather.BuildConfig.WEATHER_API_KEY
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.model.yandexweatherdto.WeatherData
+import com.example.kotlinweather.model.yandexweatherdto.WeatherDTO
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -53,10 +53,10 @@ class RepositoryNetworkImpl : Repository {
                         BufferedReader(InputStreamReader(urlConnection.inputStream))
 // преобразование ответа от сервера (JSON) в модель данных
 
-                    val weatherDTO: WeatherData =
+                    val weatherDTO: WeatherDTO =
                         Gson().fromJson(
                             getLines(bufferedReader),
-                            WeatherData::class.java
+                            WeatherDTO::class.java
                         )
 
                     val weatherReceived = Weather(

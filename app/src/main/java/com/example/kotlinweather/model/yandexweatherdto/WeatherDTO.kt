@@ -1,5 +1,5 @@
 package com.example.kotlinweather.model.yandexweatherdto
 
-data class WeatherData(
+data class WeatherDTO(
     val fact: Fact
 )
