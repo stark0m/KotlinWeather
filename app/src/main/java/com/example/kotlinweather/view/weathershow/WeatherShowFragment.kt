@@ -45,7 +45,7 @@ class WeatherShowFragment : Fragment() {
 
         viewModelWeatherShow.getObserver().observe(viewLifecycleOwner) { showData(it) }
 
-        savedInstanceState?.let{}?:viewModelWeatherShow.getWeatherList()
+        savedInstanceState?.let {} ?: viewModelWeatherShow.getWeatherList()
         initListeners()
         initRecyclerVIew()
 
@@ -78,10 +78,12 @@ class WeatherShowFragment : Fragment() {
             is AppState.Error -> {
 
 
-
-
                 binding.progress.visibility = View.GONE
-                binding.root.ShowErrorWithAction(R.string.repo_error,Snackbar.LENGTH_INDEFINITE,"Reload"){
+                binding.root.ShowErrorWithAction(
+                    R.string.repo_error,
+                    Snackbar.LENGTH_INDEFINITE,
+                    "Reload"
+                ) {
                     viewModelWeatherShow.getWeatherList()
                 }
 
@@ -127,32 +129,23 @@ class WeatherShowFragment : Fragment() {
     }
 
 
-    private fun View.ShowErrorWithAction( message:String, duration:Int, actionText:String, block:(v:View)->Unit){
-        Snackbar
-            .make(
-                binding.mainView,
-                message,
-                duration
-            )
-            .setAction(actionText,block)
-            .show()
-
-    }
-
     /**
      * перегружаем функцию, теперь возможно передать сюда строковые ресурсы
      */
-    private fun View.ShowErrorWithAction( message:Int, duration:Int, actionText:String, block:(v:View)->Unit){
+    private fun View.ShowErrorWithAction(
+        message: Int,
+        duration: Int,
+        actionText: String,
+        block: (v: View) -> Unit
+    ) {
         Snackbar
             .make(
                 binding.mainView,
                 message,
                 duration
             )
-            .setAction(actionText,block)
+            .setAction(actionText, block)
             .show()
-
-
 
 
     }

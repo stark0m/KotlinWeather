@@ -1,4 +1,4 @@
-package com.example.kotlinweather.domain.dto.yandexweatherdto
+package com.example.kotlinweather.model.yandexweatherdto
 
 data class Info(
     val lat: Double,

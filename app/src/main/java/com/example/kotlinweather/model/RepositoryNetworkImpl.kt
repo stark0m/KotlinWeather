@@ -2,12 +2,13 @@ package com.example.kotlinweather.model
 
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.kotlinweather.BuildConfig.WEATHER_API_KEY
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.domain.dto.yandexweatherdto.WeatherData
+import com.example.kotlinweather.model.yandexweatherdto.WeatherData
 import com.google.gson.Gson
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -37,8 +38,8 @@ class RepositoryNetworkImpl : Repository {
         try {
             val uri =
                 URL("${URI}lat=$lat&lon=$lon")
-            val handler = Handler()
-            Thread(Runnable {
+            val handler = Handler(Looper.getMainLooper())
+            Thread {
                 lateinit var urlConnection: HttpsURLConnection
                 try {
                     urlConnection = uri.openConnection() as HttpsURLConnection
@@ -64,17 +65,21 @@ class RepositoryNetworkImpl : Repository {
                         feelsLike = weatherDTO.fact.feels_like
                     )
 
-                    handler.post { weather.onDataReceived(weatherReceived) }
+
+                    handler.post() {
+                        weather.onDataReceived(weatherReceived)
+                    }
+
 
                 } catch (e: Exception) {
                     Log.e("@@@@", "Fail connection", e)
                     e.printStackTrace()
-                    handler.post {weather.onDataReceived(null)}
+                    handler.post { weather.onDataReceived(null) }
 //Обработка ошибки
                 } finally {
                     urlConnection.disconnect()
                 }
-            }).start()
+            }.start()
         } catch (e: MalformedURLException) {
             Log.e("@@@@", "Fail URI", e)
             e.printStackTrace()

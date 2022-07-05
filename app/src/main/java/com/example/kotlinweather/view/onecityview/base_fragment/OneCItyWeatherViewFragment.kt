@@ -30,7 +30,7 @@ class OneCItyWeatherViewFragment : Fragment() {
 
         arguments?.let {
 
-            var weatherFromBundle = it.getParcelable<Weather>(TAG_WEATHER_TO_SHOW)
+            val weatherFromBundle = it.getParcelable<Weather>(TAG_WEATHER_TO_SHOW)
             weatherToShow = weatherFromBundle
                 ?: throw IOException("Не получен бандл с городом для отображения погоды ")
         }
@@ -60,7 +60,7 @@ class OneCItyWeatherViewFragment : Fragment() {
         when (appState) {
 
             is AppState.UpdateWeatherInfo -> {
-                binding.progress.visibility=View.GONE
+                binding.progress.visibility = View.GONE
                 showRecievedWeather(appState.weather)
                 Snackbar.make(
                     binding.mainView,
@@ -101,7 +101,7 @@ class OneCItyWeatherViewFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = WeatherOneCityShowDialogBinding.inflate(inflater, container, false)
         return binding.root
     }

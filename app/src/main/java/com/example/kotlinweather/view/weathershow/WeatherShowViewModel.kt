@@ -53,8 +53,10 @@ class WeatherShowViewModel(
         vmLiveData.value = AppState.Loading
         cityListRepository?.let {
             it.getNextCityList() {
-            vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
-        } }?:vmLiveData.postValue(AppState.Error(IllegalStateException("Нет возможности загрузить данные")))
+                vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
+            }
+        }
+            ?: vmLiveData.postValue(AppState.Error(IllegalStateException("Нет возможности загрузить данные")))
     }
 
     override fun updateWeatherInfo(weather: Weather) {
@@ -68,7 +70,8 @@ class WeatherShowViewModel(
         ) { weatherFromRepository ->
             weatherFromRepository?.let {
                 vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
-            }?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
+            }
+                ?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
 
         }
     }
