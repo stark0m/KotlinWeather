@@ -1,5 +1,7 @@
 package com.example.kotlinweather.model
 
+import android.os.Handler
+import android.os.Looper
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
 import kotlin.concurrent.thread
@@ -10,22 +12,31 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
 
 
     override fun getCityList(weatherList: WeatherCallBack<List<Weather>>) {
+
+        val handler = Handler(Looper.getMainLooper())
         thread {
             Thread.sleep(2000L)
-            weatherList.onDataReceived(getWorldCities())
+            handler.post(){
+                weatherList.onDataReceived(getWorldCities())
+            }
+
         }.start()
     }
 
     override fun getNextCityList(weatherList: WeatherCallBack<List<Weather>>) {
         indicator = !indicator
+        val handler = Handler(Looper.getMainLooper())
         thread {
             Thread.sleep(1000L)
-            if (indicator) {
-                weatherList.onDataReceived(getRussianCities())
+            handler.post(){
+                if (indicator) {
+                    weatherList.onDataReceived(getRussianCities())
 
-            } else {
-                weatherList.onDataReceived(getWorldCities())
+                } else {
+                    weatherList.onDataReceived(getWorldCities())
+                }
             }
+
 
         }.start()
 
