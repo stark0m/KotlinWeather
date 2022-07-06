@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
+import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
 class CityListRepositoryHardLocalImpl : CityListRepository {
@@ -14,8 +15,8 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
     override fun getCityList(weatherList: WeatherCallBack<List<Weather>>) {
 
         val handler = Handler(Looper.getMainLooper())
-        thread {
-            Thread.sleep(2000L)
+        Thread(){
+            sleep(2000L)
             handler.post(){
                 weatherList.onDataReceived(getWorldCities())
             }
@@ -26,8 +27,8 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
     override fun getNextCityList(weatherList: WeatherCallBack<List<Weather>>) {
         indicator = !indicator
         val handler = Handler(Looper.getMainLooper())
-        thread {
-            Thread.sleep(1000L)
+        Thread() {
+            sleep(1000L)
             handler.post(){
                 if (indicator) {
                     weatherList.onDataReceived(getRussianCities())
