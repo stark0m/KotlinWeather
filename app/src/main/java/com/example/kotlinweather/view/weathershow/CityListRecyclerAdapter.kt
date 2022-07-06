@@ -7,13 +7,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.databinding.CityItemBinding
 import com.example.kotlinweather.domain.Weather
 
-class CityListRecyclerAdapter(private val dataList:List<Weather>, private val callback: ChooseCity):RecyclerView.Adapter<CityListRecyclerAdapter.WeatherViewHolder>() {
-    inner class WeatherViewHolder(view: View):RecyclerView.ViewHolder(view){
+class CityListRecyclerAdapter(
+    private val dataList: List<Weather>,
+    private val callback: ChooseCity
+) : RecyclerView.Adapter<CityListRecyclerAdapter.WeatherViewHolder>() {
+    inner class WeatherViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
-        val binding = CityItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = CityItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return WeatherViewHolder(binding.root)
     }
 
@@ -23,9 +26,9 @@ class CityListRecyclerAdapter(private val dataList:List<Weather>, private val ca
         dataList[position].apply {
             city.also { binding.idCityName.text = it.name }
 
-        binding.root.setOnClickListener(){
-            callback.onCityClicked(this)
-        }
+            binding.root.setOnClickListener() {
+                callback.onCityClicked(this)
+            }
         }
     }
 

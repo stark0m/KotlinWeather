@@ -27,10 +27,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_margin="@dimen/float_button_margin"
-            android:src="@drawable/ic_baseline_navigate_next_24"/>
+            android:src="@drawable/ic_baseline_navigate_next_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
     <ProgressBar

@@ -9,10 +9,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if(savedInstanceState==null){
-            supportFragmentManager.beginTransaction().replace(R.id.container,WeatherShowFragment.newInstance()).commit()
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, WeatherShowFragment.newInstance()).commit()
         }
-        }
+    }
 
 
 }

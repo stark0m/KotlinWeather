@@ -13,7 +13,7 @@ class WeatherShowViewModel(
     var repository: Repository? = null
     var cityListRepository: CityListRepository? = null
 
-    private fun isConnected() = false
+    private fun isConnected() = true
 
     fun getObserver(): MutableLiveData<AppState> {
         return vmLiveData
@@ -53,19 +53,25 @@ class WeatherShowViewModel(
         vmLiveData.value = AppState.Loading
         cityListRepository?.let {
             it.getNextCityList() {
-            vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
-        } }?:vmLiveData.postValue(AppState.Error(IllegalStateException("Нет возможности загрузить данные")))
+                vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
+            }
+        }
+            ?: vmLiveData.postValue(AppState.Error(IllegalStateException("Нет возможности загрузить данные")))
     }
 
     override fun updateWeatherInfo(weather: Weather) {
         chooseRepository()
+        vmLiveData.value = AppState.Loading
         repository?.getWeather(
             lat = weather.city.lat,
-            lon = weather.city.lon
+            lon = weather.city.lon,
+            cityName = weather.city.name
+
         ) { weatherFromRepository ->
             weatherFromRepository?.let {
                 vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
-            }?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
+            }
+                ?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
 
         }
     }
