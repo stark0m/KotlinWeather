@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.BROADCAST_INTENT_FILTER
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.lesson6.Lesson6Fragment
 import com.example.kotlinweather.view.onecityview.base_fragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
@@ -123,12 +125,25 @@ class WeatherShowFragment : Fragment() {
             is AppState.ShowWeater -> {
                 binding.progress.visibility = View.GONE
 
+                /**
+                 * вызов делаем для выполнения 2го задания 6 урока, закоментировать в будующем
+                 */
                 requireActivity().supportFragmentManager
                     .beginTransaction()
                     .hide(this)
-                    .add(R.id.container, OneCItyWeatherViewFragment.newInstance(state.weather))
+                    .add(R.id.container, Lesson6Fragment.newInstance(state.weather))
                     .addToBackStack("")
                     .commit()
+
+                /**
+                 * для работы с правильной архитектурой разблокировать необходимо вызов ниже,
+                 */
+//                requireActivity().supportFragmentManager
+//                    .beginTransaction()
+//                    .hide(this)
+//                    .add(R.id.container, OneCItyWeatherViewFragment.newInstance(state.weather))
+//                    .addToBackStack("")
+//                    .commit()
 
 
                 /**
