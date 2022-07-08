@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
-import com.example.kotlinweather.domain.BROADCAST_INTENT_FILTER
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.lesson6.Lesson6Fragment
-import com.example.kotlinweather.view.onecityview.base_fragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
 
