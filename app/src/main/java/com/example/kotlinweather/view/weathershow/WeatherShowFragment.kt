@@ -1,5 +1,9 @@
 package com.example.kotlinweather.view.weathershow
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
+import com.example.kotlinweather.domain.BROADCAST_INTENT
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.view.onecityview.base_fragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
@@ -21,6 +26,13 @@ class WeatherShowFragment : Fragment() {
     lateinit var recyclerAdapter: CityListRecyclerAdapter
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
         ViewModelProvider(this)[WeatherShowViewModel::class.java]
+    }
+
+    private val broadcastReceiver = object :BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            TODO("Not yet implemented")
+        }
+
     }
     private lateinit var clickWeatherListener: ChooseCity
 
@@ -50,6 +62,11 @@ class WeatherShowFragment : Fragment() {
         initRecyclerVIew()
 
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireContext().registerReceiver(broadcastReceiver, IntentFilter(BROADCAST_INTENT))
     }
 
     private fun initListeners() {
@@ -160,5 +177,6 @@ class WeatherShowFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        requireContext().unregisterReceiver(broadcastReceiver)
     }
 }
