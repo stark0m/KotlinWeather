@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
-import com.example.kotlinweather.domain.BROADCAST_INTENT
+import com.example.kotlinweather.domain.BROADCAST_INTENT_FILTER
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.view.onecityview.base_fragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
@@ -29,11 +29,14 @@ class WeatherShowFragment : Fragment() {
     }
 
     private val broadcastReceiver = object :BroadcastReceiver(){
-        override fun onReceive(p0: Context?, p1: Intent?) {
-            TODO("Not yet implemented")
-        }
+    override fun onReceive(p0: Context?, p1: Intent?) {
+        p1?.let { Toast.makeText(requireContext(), "${it.action}", Toast.LENGTH_SHORT).show()}
 
     }
+
+}
+
+
     private lateinit var clickWeatherListener: ChooseCity
 
 
@@ -66,7 +69,7 @@ class WeatherShowFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireContext().registerReceiver(broadcastReceiver, IntentFilter(BROADCAST_INTENT))
+        requireContext().registerReceiver(broadcastReceiver, IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     private fun initListeners() {
