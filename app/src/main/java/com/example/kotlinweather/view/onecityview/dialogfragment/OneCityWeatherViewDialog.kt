@@ -1,4 +1,4 @@
-package com.example.kotlinweather.view.onecityview.dialog_fragment
+package com.example.kotlinweather.view.onecityview.dialogfragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

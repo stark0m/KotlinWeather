@@ -21,9 +21,7 @@ class WeatherService(name: String = "WeatherService") : IntentService(name) {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onHandleIntent(intent: Intent?) {
         intent?.let {
-
             val weather: Weather? = it.getParcelableExtra(WEATHET_DTO_KEY)
-
             weather?.let { weather ->
                 val lat = weather.city.lat
                 val lon = weather.city.lon

@@ -10,8 +10,8 @@ import com.example.kotlinweather.viewmodel.ViewModelInterface
 class WeatherShowViewModel(
     private val vmLiveData: MutableLiveData<AppState> = MutableLiveData<AppState>()
 ) : ViewModel(), ViewModelInterface {
-    var repository: Repository? = null
-    var cityListRepository: CityListRepository? = null
+    private var repository: Repository? = null
+    private var cityListRepository: CityListRepository? = null
 
     private fun isConnected() = true
 
