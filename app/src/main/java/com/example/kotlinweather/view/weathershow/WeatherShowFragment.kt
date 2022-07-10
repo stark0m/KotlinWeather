@@ -1,9 +1,14 @@
 package com.example.kotlinweather.view.weathershow
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.view.onecityview.base_fragment.OneCItyWeatherViewFragment
+import com.example.kotlinweather.lesson6.Lesson6Fragment
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
 
@@ -22,6 +27,16 @@ class WeatherShowFragment : Fragment() {
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
         ViewModelProvider(this)[WeatherShowViewModel::class.java]
     }
+
+    private val broadcastReceiver = object :BroadcastReceiver(){
+    override fun onReceive(p0: Context?, p1: Intent?) {
+        p1?.let { Toast.makeText(requireContext(), "${it.action}", Toast.LENGTH_SHORT).show()}
+
+    }
+
+}
+
+
     private lateinit var clickWeatherListener: ChooseCity
 
 
@@ -50,6 +65,11 @@ class WeatherShowFragment : Fragment() {
         initRecyclerVIew()
 
 
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireContext().registerReceiver(broadcastReceiver, IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     private fun initListeners() {
@@ -103,12 +123,25 @@ class WeatherShowFragment : Fragment() {
             is AppState.ShowWeater -> {
                 binding.progress.visibility = View.GONE
 
+                /**
+                 * вызов делаем для выполнения 2го задания 6 урока, закоментировать в будующем
+                 */
                 requireActivity().supportFragmentManager
                     .beginTransaction()
                     .hide(this)
-                    .add(R.id.container, OneCItyWeatherViewFragment.newInstance(state.weather))
+                    .add(R.id.container, Lesson6Fragment.newInstance(state.weather))
                     .addToBackStack("")
                     .commit()
+
+                /**
+                 * для работы с правильной архитектурой разблокировать необходимо вызов ниже,
+                 */
+//                requireActivity().supportFragmentManager
+//                    .beginTransaction()
+//                    .hide(this)
+//                    .add(R.id.container, OneCItyWeatherViewFragment.newInstance(state.weather))
+//                    .addToBackStack("")
+//                    .commit()
 
 
                 /**
@@ -160,5 +193,6 @@ class WeatherShowFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        requireContext().unregisterReceiver(broadcastReceiver)
     }
 }

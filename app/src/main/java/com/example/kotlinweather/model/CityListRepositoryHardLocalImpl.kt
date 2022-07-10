@@ -5,7 +5,6 @@ import android.os.Looper
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
 import java.lang.Thread.sleep
-import kotlin.concurrent.thread
 
 class CityListRepositoryHardLocalImpl : CityListRepository {
 

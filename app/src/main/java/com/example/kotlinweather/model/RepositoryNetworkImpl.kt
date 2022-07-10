@@ -8,6 +8,8 @@ import androidx.annotation.RequiresApi
 import com.example.kotlinweather.BuildConfig.WEATHER_API_KEY
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.domain.YANDEX_WEATHER_API_KEY
+import com.example.kotlinweather.domain.YANDEX_WEATHER_API_URI
 import com.example.kotlinweather.model.yandexweatherdto.WeatherDTO
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -18,9 +20,7 @@ import java.util.stream.Collectors
 import javax.net.ssl.HttpsURLConnection
 
 class RepositoryNetworkImpl : Repository {
-    companion object {
-        private val URI = "https://api.weather.yandex.ru/v2/informers?"
-    }
+
 
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -37,7 +37,7 @@ class RepositoryNetworkImpl : Repository {
     ) {
         try {
             val uri =
-                URL("${URI}lat=$lat&lon=$lon")
+                URL("${YANDEX_WEATHER_API_URI}lat=$lat&lon=$lon")
             val handler = Handler(Looper.getMainLooper())
             Thread {
                 lateinit var urlConnection: HttpsURLConnection
@@ -45,7 +45,7 @@ class RepositoryNetworkImpl : Repository {
                     urlConnection = uri.openConnection() as HttpsURLConnection
                     urlConnection.requestMethod = "GET"
                     urlConnection.addRequestProperty(
-                        "X-Yandex-API-Key",
+                        YANDEX_WEATHER_API_KEY,
                         WEATHER_API_KEY
                     )
                     urlConnection.readTimeout = 5000
