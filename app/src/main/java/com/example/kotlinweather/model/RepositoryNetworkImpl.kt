@@ -8,8 +8,8 @@ import androidx.annotation.RequiresApi
 import com.example.kotlinweather.BuildConfig.WEATHER_API_KEY
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.domain.YANDEX_WEATHER_API_FULL_URI
 import com.example.kotlinweather.domain.YANDEX_WEATHER_API_KEY
-import com.example.kotlinweather.domain.YANDEX_WEATHER_API_URI
 import com.example.kotlinweather.model.yandexweatherdto.WeatherDTO
 import com.google.gson.Gson
 import java.io.BufferedReader
@@ -37,7 +37,7 @@ class RepositoryNetworkImpl : Repository {
     ) {
         try {
             val uri =
-                URL("${YANDEX_WEATHER_API_URI}lat=$lat&lon=$lon")
+                URL("${YANDEX_WEATHER_API_FULL_URI}lat=$lat&lon=$lon")
             val handler = Handler(Looper.getMainLooper())
             Thread {
                 lateinit var urlConnection: HttpsURLConnection

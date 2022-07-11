@@ -27,7 +27,7 @@ class WeatherService(name: String = "WeatherService") : IntentService(name) {
                 val lon = weather.city.lon
                 val cityName = weather.city.name
                 try {
-                    val uri = URL("${YANDEX_WEATHER_API_URI}lat=$lat&lon=$lon")
+                    val uri = URL("${YANDEX_WEATHER_API_FULL_URI}lat=$lat&lon=$lon")
 
                     lateinit var urlConnection: HttpsURLConnection
                     try {

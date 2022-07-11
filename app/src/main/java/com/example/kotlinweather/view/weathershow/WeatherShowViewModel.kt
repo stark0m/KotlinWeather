@@ -85,7 +85,8 @@ class WeatherShowViewModel(
              * тут выбираем какой тип репозитория будем использовать для получения данных
              */
 //            RepositoryNetworkImpl()
-            RepositoryRemoteOkHttp3Impl()
+//            RepositoryRemoteOkHttp3Impl()
+            RepositoryRemoteRetrofitImpl()
         } else {
             RepositoryLocalImpl()
         }

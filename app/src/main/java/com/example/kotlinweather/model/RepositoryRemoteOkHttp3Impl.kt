@@ -3,7 +3,10 @@ package com.example.kotlinweather.model
 import android.os.Handler
 import android.os.Looper
 import com.example.kotlinweather.BuildConfig
-import com.example.kotlinweather.domain.*
+import com.example.kotlinweather.domain.City
+import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.domain.YANDEX_WEATHER_API_FULL_URI
+import com.example.kotlinweather.domain.YANDEX_WEATHER_API_KEY
 import com.example.kotlinweather.model.yandexweatherdto.WeatherDTO
 import com.google.gson.Gson
 import okhttp3.*
@@ -85,7 +88,7 @@ class RepositoryRemoteOkHttp3Impl:Repository {
     private fun initOkHttp(city: City) {
         requestBuilder.apply {
             header(YANDEX_WEATHER_API_KEY, BuildConfig.WEATHER_API_KEY)
-            url("${YANDEX_WEATHER_API_URI}lat=${city.lat}&lon=${city.lon}")
+            url("${YANDEX_WEATHER_API_FULL_URI}lat=${city.lat}&lon=${city.lon}")
         }
         request = requestBuilder.build()
     }
