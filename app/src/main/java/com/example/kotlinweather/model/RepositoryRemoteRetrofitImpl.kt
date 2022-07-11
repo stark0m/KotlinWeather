@@ -28,7 +28,7 @@ class RepositoryRemoteRetrofitImpl:Repository {
     private fun setOkHttp3CallbackListener(cityReceived: City, weather: WeatherCallBack<Weather?>) {
         okHttpCall.enqueue(object :Callback{
             override fun onFailure(call: Call, e: IOException) {
-                weather.onDataReceived(null)
+                sendBackError(IOException(),weather)
             }
 
             override fun onResponse(call: Call, serverResponse: Response) {
@@ -46,9 +46,13 @@ class RepositoryRemoteRetrofitImpl:Repository {
                         temperature = weatherDTO.fact.temp,
                         feelsLike = weatherDTO.fact.feels_like
                     )
+
                     Handler(Looper.getMainLooper()).post(){
                         weather.onDataReceived(weatherReceived)
                     }
+                } else
+                {
+                    sendBackError(IOException(),weather)
                 }
             }
 
@@ -57,6 +61,11 @@ class RepositoryRemoteRetrofitImpl:Repository {
         )
     }
 
+
+    private fun sendBackError(e:Exception, weather: WeatherCallBack<Weather?>){
+        weather.onDataReceived(null)
+
+    }
     private fun makeRemoteCall() {
         okHttpCall = okHttpClient.newCall(request)
     }
@@ -70,4 +79,3 @@ class RepositoryRemoteRetrofitImpl:Repository {
     }
 }
 
-private fun Call.enqueue(
