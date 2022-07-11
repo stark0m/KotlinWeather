@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlinweather.databinding.WeatherOneCityShowDialogBinding
+import com.example.kotlinweather.domain.CITY_IMAGE_URL
 import com.example.kotlinweather.domain.TAG_WEATHER_TO_SHOW
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import java.io.IOException
 
 
@@ -93,6 +95,10 @@ class OneCItyWeatherViewFragment : Fragment() {
                 temperatureValue.text = it_weather.temperature.toString()
                 feelsLikeValue.text = it_weather.feelsLike.toString()
                 cityCoordinates.text = "${it_weather.city.lat}/${it_weather.city.lon}"
+                Picasso
+                    .get()
+                    .load(CITY_IMAGE_URL)
+                    .into(binding.cityImage)
             }
 
         }
