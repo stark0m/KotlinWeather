@@ -9,7 +9,7 @@ import com.google.gson.Gson
 import okhttp3.*
 import java.io.IOException
 
-class RepositoryRemoteRetrofitImpl:Repository {
+class RepositoryRemoteOkHttp3Impl:Repository {
     private val okHttpClient = OkHttpClient()
     private val requestBuilder = Request.Builder()
     private lateinit var request: Request
@@ -28,28 +28,38 @@ class RepositoryRemoteRetrofitImpl:Repository {
     private fun setOkHttp3CallbackListener(cityReceived: City, weather: WeatherCallBack<Weather?>) {
         okHttpCall.enqueue(object :Callback{
             override fun onFailure(call: Call, e: IOException) {
-                sendBackError(IOException(),weather)
+                sendBackError(UnsupportedOperationException(),weather)
             }
 
             override fun onResponse(call: Call, serverResponse: Response) {
                 val response:String? = serverResponse.body?.string()
                 if (serverResponse.isSuccessful && response!=null){
 
-                    val weatherDTO: WeatherDTO =
-                        Gson().fromJson(
-                            response,
-                            WeatherDTO::class.java
+
+                    try {
+                        val weatherDTO: WeatherDTO =
+                            Gson().fromJson(
+                                response,
+                                WeatherDTO::class.java
+                            )
+
+
+
+                        val weatherReceived = Weather(
+                            city = cityReceived,
+                            temperature = weatherDTO.fact.temp,
+                            feelsLike = weatherDTO.fact.feels_like
                         )
 
-                    val weatherReceived = Weather(
-                        city = cityReceived,
-                        temperature = weatherDTO.fact.temp,
-                        feelsLike = weatherDTO.fact.feels_like
-                    )
-
-                    Handler(Looper.getMainLooper()).post(){
-                        weather.onDataReceived(weatherReceived)
+                        Handler(Looper.getMainLooper()).post(){
+                            weather.onDataReceived(weatherReceived)
+                        }
+                    } catch (e:Exception){
+                        sendBackError(e,weather)
                     }
+
+
+
                 } else
                 {
                     sendBackError(IOException(),weather)
@@ -60,6 +70,8 @@ class RepositoryRemoteRetrofitImpl:Repository {
 
         )
     }
+
+
 
 
     private fun sendBackError(e:Exception, weather: WeatherCallBack<Weather?>){
