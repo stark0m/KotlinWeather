@@ -1,5 +1,6 @@
 package com.example.kotlinweather.model
 
+import android.util.Log
 import com.example.kotlinweather.BuildConfig
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.Weather
@@ -54,6 +55,7 @@ class RepositoryRemoteRetrofitImpl : Repository {
 
 
     private fun sendBackError(e: Throwable, weather: WeatherCallBack<Weather?>) {
+        Log.e("RETROFIT DATA",e.message.toString())
         weather.onDataReceived(null)
 
     }
