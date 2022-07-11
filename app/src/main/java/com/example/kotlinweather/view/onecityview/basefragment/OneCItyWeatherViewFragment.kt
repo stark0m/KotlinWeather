@@ -1,5 +1,6 @@
 package com.example.kotlinweather.view.onecityview.basefragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlinweather.databinding.WeatherOneCityShowDialogBinding
 import com.example.kotlinweather.domain.CITY_IMAGE_URL
+import com.example.kotlinweather.domain.CITY_IMAGE_WEATHER_URL
 import com.example.kotlinweather.domain.TAG_WEATHER_TO_SHOW
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
 import com.example.kotlinweather.viewmodel.AppState
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import java.io.IOException
@@ -99,6 +102,13 @@ class OneCItyWeatherViewFragment : Fragment() {
                     .get()
                     .load(CITY_IMAGE_URL)
                     .into(binding.cityImage)
+            }
+            weather.icon?.let {
+                GlideToVectorYou.justLoadImage(
+                    requireActivity(),
+                    Uri.parse("$CITY_IMAGE_WEATHER_URL${it}.svg"),
+                    binding.weatherImage
+                )
             }
 
         }
