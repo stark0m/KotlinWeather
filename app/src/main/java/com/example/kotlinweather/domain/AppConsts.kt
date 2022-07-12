@@ -8,6 +8,7 @@ const val YANDEX_WEATHER_API_URI = "https://api.weather.yandex.ru/"
 const val YANDEX_WEATHER_API_KEY = "X-Yandex-API-Key"
 const val CITY_IMAGE_URL = "https://freepngimg.com/thumb/city/36275-3-city-hd.png"
 const val CITY_IMAGE_WEATHER_URL = "https://yastatic.net/weather/i/icons/funky/dark/"
+const val RETROFIT_REPOSITORY = "RETROFIT_REPOSITORY"
 
 const val LAT = "lat"
 const val LON = "lon"
