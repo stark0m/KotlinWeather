@@ -23,6 +23,7 @@ class Lesson6Fragment : Fragment() {
     private var _binding: WeatherOneCityShowDialogBinding? = null
     private val binding get() = _binding!!
     private lateinit var weatherToShow: Weather
+
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
             p1?.let {
@@ -98,7 +99,7 @@ class Lesson6Fragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
-        requireContext().unregisterReceiver(broadcastReceiver)
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver)
     }
 
     companion object {

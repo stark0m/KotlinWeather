@@ -1,5 +1,6 @@
 package com.example.kotlinweather.view.onecityview.basefragment
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,11 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlinweather.databinding.WeatherOneCityShowDialogBinding
+import com.example.kotlinweather.domain.CITY_IMAGE_URL
+import com.example.kotlinweather.domain.CITY_IMAGE_WEATHER_URL
 import com.example.kotlinweather.domain.TAG_WEATHER_TO_SHOW
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
 import com.example.kotlinweather.viewmodel.AppState
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import java.io.IOException
 
 
@@ -39,7 +44,7 @@ class OneCItyWeatherViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showRecievedWeather(weatherToShow)
+//        showRecievedWeather(weatherToShow)
         initObserverFromViewModel()
         sendRequestToUpdateCurrentCityWeatherInfo()
     }
@@ -93,6 +98,17 @@ class OneCItyWeatherViewFragment : Fragment() {
                 temperatureValue.text = it_weather.temperature.toString()
                 feelsLikeValue.text = it_weather.feelsLike.toString()
                 cityCoordinates.text = "${it_weather.city.lat}/${it_weather.city.lon}"
+                Picasso
+                    .get()
+                    .load(CITY_IMAGE_URL)
+                    .into(binding.cityImage)
+            }
+            weather.icon?.let {
+                GlideToVectorYou.justLoadImage(
+                    requireActivity(),
+                    Uri.parse("$CITY_IMAGE_WEATHER_URL${it}.svg"),
+                    binding.weatherImage
+                )
             }
 
         }

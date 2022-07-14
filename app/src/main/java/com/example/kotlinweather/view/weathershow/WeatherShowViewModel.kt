@@ -81,7 +81,12 @@ class WeatherShowViewModel(
 
     private fun chooseRepository() {
         repository = if (isConnected()) {
-            RepositoryNetworkImpl()
+            /**
+             * тут выбираем какой тип репозитория будем использовать для получения данных
+             */
+//            RepositoryNetworkImpl()
+//            RepositoryRemoteOkHttp3Impl()
+            RepositoryRemoteRetrofitImpl()
         } else {
             RepositoryLocalImpl()
         }
