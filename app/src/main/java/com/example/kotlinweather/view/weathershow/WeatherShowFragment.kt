@@ -60,7 +60,7 @@ class WeatherShowFragment : Fragment() {
 
         viewModelWeatherShow.getObserver().observe(viewLifecycleOwner) { showData(it) }
 
-        savedInstanceState?.let {} ?: viewModelWeatherShow.getWeatherList()
+        viewModelWeatherShow.getWeatherList()
         initListeners()
         initRecyclerVIew()
 

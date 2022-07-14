@@ -1,46 +1,34 @@
-package com.example.kotlinweather.model
+package com.example.kotlinweather.model.citylist
 
 import android.os.Handler
 import android.os.Looper
 import com.example.kotlinweather.domain.City
+import com.example.kotlinweather.domain.CityListEnum
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.model.WeatherCallBack
 import java.lang.Thread.sleep
 
 class CityListRepositoryHardLocalImpl : CityListRepository {
 
-    private var indicator = false
 
 
-    override fun getCityList(weatherList: WeatherCallBack<List<Weather>>) {
+    override fun getCityList(cityListEnum:CityListEnum ,weatherList: WeatherCallBack<List<Weather>>) {
 
         val handler = Handler(Looper.getMainLooper())
         Thread(){
             sleep(2000L)
             handler.post(){
-                weatherList.onDataReceived(getWorldCities())
-            }
 
-        }.start()
-    }
-
-    override fun getNextCityList(weatherList: WeatherCallBack<List<Weather>>) {
-        indicator = !indicator
-        val handler = Handler(Looper.getMainLooper())
-        Thread() {
-            sleep(1000L)
-            handler.post(){
-                if (indicator) {
-                    weatherList.onDataReceived(getRussianCities())
-
-                } else {
-                    weatherList.onDataReceived(getWorldCities())
+                when(cityListEnum){
+                    CityListEnum.RUSSIAN -> weatherList.onDataReceived(getRussianCities())
+                    CityListEnum.WORLD -> weatherList.onDataReceived(getWorldCities())
                 }
+
             }
 
-
         }.start()
-
     }
+
 
     private fun getWorldCities() = listOf(
         Weather(City("Лондон", 51.5085300, -0.1257400), 1, 2),
