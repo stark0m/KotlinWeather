@@ -13,11 +13,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RepositoryRemoteRetrofitImpl : Repository {
-    private val retrofitBuilder = Retrofit.Builder()
+    private val retrofitBuilder:GetWeatherAPI by lazy {
+        Retrofit.Builder()
         .baseUrl(YANDEX_WEATHER_API_URI)
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .build()
-        .create(GetWeatherAPI::class.java)
+        .create(GetWeatherAPI::class.java)}
 
 
     override fun getWeather(
