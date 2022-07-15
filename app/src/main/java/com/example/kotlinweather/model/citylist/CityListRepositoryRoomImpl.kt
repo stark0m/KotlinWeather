@@ -2,13 +2,19 @@ package com.example.kotlinweather.model.citylist
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.example.kotlinweather.app.RoomApp
 import com.example.kotlinweather.domain.*
 import com.example.kotlinweather.model.WeatherCallBack
 import com.example.kotlinweather.model.room.CityListEntity
+import java.text.DateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 import java.util.function.LongFunction
 
 class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator {
@@ -45,12 +51,13 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun updateWether(weather: Weather?) {
         if (weather != null) {
             Thread {
                 with(weather) {
                     RoomApp.getCityListDatabase().cityListDao()
-                        .updateWeater(city.lat, city.lon, city.name, temperature, feelsLike)
+                        .updateWeater(city.lat, city.lon, city.name, temperature, feelsLike,dateUpdated)
                 }
 
             }.start()
@@ -105,9 +112,9 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
                 temperature = it.temperature,
                 feelsLike = it.feelsLike,
                 columnCityListName = enum.toString(),
-                id = 0
-//                id = (0..1000).random().toLong()
-            )//FIXME id тут что то не так, не должны мы указывать айди
+                id = 0,
+                updated = it.dateUpdated
+            )
         }
     }
 

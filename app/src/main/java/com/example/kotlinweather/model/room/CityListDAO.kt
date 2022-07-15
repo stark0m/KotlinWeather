@@ -17,8 +17,8 @@ interface CityListDAO {
     @Query("SELECT * FROM city_list_entity_table WHERE columnCityListName=:cityListName")
     fun getCityList(cityListName:String):List<CityListEntity>
 
-    @Query("UPDATE city_list_entity_table SET temperature=:temperature,feelsLike=:feelsLike WHERE lat=:lat AND lon=:lon AND cityName=:cityName")
-    fun updateWeater(lat:Double,lon:Double,cityName:String,temperature:Int,feelsLike:Int)
+    @Query("UPDATE city_list_entity_table SET temperature=:temperature,feelsLike=:feelsLike,updated=:dateString WHERE lat=:lat AND lon=:lon AND cityName=:cityName")
+    fun updateWeater(lat:Double,lon:Double,cityName:String,temperature:Int,feelsLike:Int,dateString:String)
 
 }
 

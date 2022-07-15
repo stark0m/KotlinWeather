@@ -87,7 +87,6 @@ class WeatherShowFragment : Fragment() {
 
     private fun initRecyclerVIew() {
 
-        binding.idRecyclerView.adapter = CityListRecyclerAdapter(listOf()) {}
         binding.idRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 

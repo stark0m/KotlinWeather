@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.databinding.CityItemBinding
+import com.example.kotlinweather.domain.DEFAULT_DATE
 import com.example.kotlinweather.domain.TEMP_MINUS
 import com.example.kotlinweather.domain.TEMP_PLUS
 import com.example.kotlinweather.domain.Weather
@@ -27,11 +28,17 @@ class CityListRecyclerAdapter(
         val binding = CityItemBinding.bind(holder.itemView)
         dataList[position].apply {
             city.also { binding.idCityName.text = it.name }
-            if (temperature>0) {
-                binding.idCityTemp.text = "$TEMP_PLUS$temperature"
-            } else {
-                binding.idCityTemp.text =  "$TEMP_MINUS$temperature"
-            }
+
+//            if (!dateUpdated.equals(DEFAULT_DATE)){
+
+               if (temperature>=0) {
+                   binding.idCityTemp.text = "$dateUpdated $TEMP_PLUS$temperature"
+               } else {
+                   binding.idCityTemp.text =  "$dateUpdated $TEMP_MINUS$temperature"
+               }
+//           }
+
+
 
 
             binding.root.setOnClickListener() {

@@ -13,8 +13,9 @@ const val CITY_LIST_KEY_FILE_NAME = "CITY_LIST_KEY_FILE_NAME"
 const val CURRENT_CITY_LIST_ENUM_NAME = "CITY_LIST_KEY_FILE_NAME"
 const val IS_FIRST_LAUNCH_APP = "IS_FIRST_LAUNCH_APP"
 const val ROOM_PREFS_FILE = "ROOM_PREFS_FILE"
-const val TEMP_PLUS = "Температура +"
-const val TEMP_MINUS = "Температура -"
+const val TEMP_PLUS = "T +"
+const val TEMP_MINUS = "T -"
+const val DEFAULT_DATE="00"
 
 const val ROOM_DB_NAME= "CITY_LIST_DB"
 

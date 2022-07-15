@@ -13,5 +13,6 @@ data class CityListEntity(
     val lon: Double,
     val temperature: Int = 0,
     val feelsLike: Int = 0,
-    val columnCityListName: String
+    val columnCityListName: String,
+    val updated:String
 )

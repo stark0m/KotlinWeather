@@ -109,6 +109,7 @@ class WeatherShowViewModel(
             cityName = weather.city.name
 
         ) { weatherFromRepository ->
+
             cityListRepository.updateWether(weatherFromRepository)
             weatherFromRepository?.let {
                 vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
