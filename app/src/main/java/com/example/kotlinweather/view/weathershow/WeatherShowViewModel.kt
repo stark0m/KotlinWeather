@@ -9,7 +9,9 @@ import com.example.kotlinweather.domain.CITY_LIST_KEY_FILE_NAME
 import com.example.kotlinweather.domain.CURRENT_CITY_LIST_ENUM_NAME
 import com.example.kotlinweather.domain.CityListEnum
 import com.example.kotlinweather.domain.Weather
-import com.example.kotlinweather.model.*
+import com.example.kotlinweather.model.Repository
+import com.example.kotlinweather.model.RepositoryLocalImpl
+import com.example.kotlinweather.model.RepositoryRemoteRetrofitImpl
 import com.example.kotlinweather.model.citylist.CityListRepository
 import com.example.kotlinweather.model.citylist.CityListRepositoryHardLocalImpl
 import com.example.kotlinweather.viewmodel.AppState
@@ -34,7 +36,7 @@ class WeatherShowViewModel(
         set(value) {
             sharedPreferences.edit().putString(
                 CURRENT_CITY_LIST_ENUM_NAME, value
-            ).commit()
+            ).apply()
         }
 
     private fun isConnected() = true
