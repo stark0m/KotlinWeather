@@ -3,6 +3,8 @@ package com.example.kotlinweather.model.citylist
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.kotlinweather.app.RoomApp
@@ -26,16 +28,22 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
             IS_FIRST_LAUNCH_APP, true
         )
         Log.i(TAG, "isAppLaunchFirstTimeInDevice= $isAppLaunchFirstTimeInDevice")
-        if (isAppLaunchFirstTimeInDevice) {
-            Log.i(TAG, "launch first")
-            sharedPreferencesRoom.edit().putBoolean(IS_FIRST_LAUNCH_APP, false).apply()
-            putDefaultCitiesList()
-        }
 
-        RoomApp.getCityList(cityListTabName) {
-            val convertedList: List<Weather> = convertFromEntityToWeatherList(it)
-            weatherList.onDataReceived(convertedList)
-        }
+       Thread{
+           if (isAppLaunchFirstTimeInDevice) {
+               Log.i(TAG, "launch first")
+               sharedPreferencesRoom.edit().putBoolean(IS_FIRST_LAUNCH_APP, false).apply()
+               putDefaultCitiesList()
+           }
+
+           RoomApp.getCityList(cityListTabName) {
+               val convertedList: List<Weather> = convertFromEntityToWeatherList(it)
+               Handler(Looper.getMainLooper()).post{
+                   weatherList.onDataReceived(convertedList)
+               }
+           }
+       }.start()
+
 
 
     }
@@ -118,11 +126,11 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
 
     private fun putCityListToDB(cityList: List<CityListEntity>) {
 
-        Thread {
+
             cityList.forEach {
                 RoomApp.getCityListDatabase().cityListDao().insert(it)
             }
-        }.start()
+
 
 
     }
