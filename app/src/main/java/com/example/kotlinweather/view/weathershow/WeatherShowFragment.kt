@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,18 +24,18 @@ import com.google.android.material.snackbar.Snackbar
 class WeatherShowFragment : Fragment() {
     private var _binding: WeatherShowFragmentBinding? = null
     private val binding get() = _binding!!
-    lateinit var recyclerAdapter: CityListRecyclerAdapter
+//    private val viewModelWeatherShow: WeatherShowViewModel by activityViewModels()
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
-        ViewModelProvider(this)[WeatherShowViewModel::class.java]
+        ViewModelProvider(requireActivity()).get(WeatherShowViewModel::class.java)
     }
 
-    private val broadcastReceiver = object :BroadcastReceiver(){
-    override fun onReceive(p0: Context?, p1: Intent?) {
-        p1?.let { Toast.makeText(requireContext(), "${it.action}", Toast.LENGTH_SHORT).show()}
+    private val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            p1?.let { Toast.makeText(requireContext(), "${it.action}", Toast.LENGTH_SHORT).show() }
+
+        }
 
     }
-
-}
 
 
     private lateinit var clickWeatherListener: ChooseCity
@@ -69,7 +70,10 @@ class WeatherShowFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireContext().registerReceiver(broadcastReceiver, IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION))
+        requireContext().registerReceiver(
+            broadcastReceiver,
+            IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION)
+        )
     }
 
     private fun initListeners() {
@@ -117,7 +121,8 @@ class WeatherShowFragment : Fragment() {
             is AppState.ReceivedCityListSuccess -> {
                 updateCityList(state.cityList)
                 binding.progress.visibility = View.GONE
-                Snackbar.make(binding.mainView, "Success loaded list", Snackbar.LENGTH_LONG).show()
+
+                Toast.makeText(requireContext(), "Success loaded list", Toast.LENGTH_SHORT).show()
             }
             is AppState.ShowWeater -> {
                 binding.progress.visibility = View.GONE

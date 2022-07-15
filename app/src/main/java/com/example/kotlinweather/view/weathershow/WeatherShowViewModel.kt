@@ -91,11 +91,7 @@ class WeatherShowViewModel(
         cityListTabNameEnum = cityListTabNameEnum.getNext()
         cityListStringTabName = cityListTabNameEnum.toString()
 
-        cityListRepository.let {
-            it.getCityList(cityListTabNameEnum!!) {
-                vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
-            }
-        }
+        getWeatherList()
 
     }
 
@@ -111,6 +107,7 @@ class WeatherShowViewModel(
         ) { weatherFromRepository ->
 
             cityListRepository.updateWether(weatherFromRepository)
+
             weatherFromRepository?.let {
                 vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
 
