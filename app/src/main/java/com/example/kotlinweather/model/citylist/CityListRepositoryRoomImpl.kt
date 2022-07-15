@@ -3,19 +3,12 @@ package com.example.kotlinweather.model.citylist
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.kotlinweather.app.RoomApp
 import com.example.kotlinweather.domain.*
 import com.example.kotlinweather.model.WeatherCallBack
 import com.example.kotlinweather.model.room.CityListEntity
-import java.text.DateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
-import java.util.function.LongFunction
 
 class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator {
     companion object {
@@ -27,7 +20,7 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
         RoomApp.appContext!!.getSharedPreferences(ROOM_PREFS_FILE, Context.MODE_PRIVATE)
     }
 
-    override fun getCityList(key: CityListEnum, weatherList: WeatherCallBack<List<Weather>>) {
+    override fun getCityList(cityListTabName: CityListEnum, weatherList: WeatherCallBack<List<Weather>>) {
         Log.i(TAG, "getCityList")
         val isAppLaunchFirstTimeInDevice = sharedPreferencesRoom.getBoolean(
             IS_FIRST_LAUNCH_APP, true
@@ -35,15 +28,11 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
         Log.i(TAG, "isAppLaunchFirstTimeInDevice= $isAppLaunchFirstTimeInDevice")
         if (isAppLaunchFirstTimeInDevice) {
             Log.i(TAG, "launch first")
-            sharedPreferencesRoom.edit().putBoolean(IS_FIRST_LAUNCH_APP, false).commit()
+            sharedPreferencesRoom.edit().putBoolean(IS_FIRST_LAUNCH_APP, false).apply()
             putDefaultCitiesList()
         }
 
-//            val cityList =
-//                RoomApp.getCityListDatabase().cityListDao().getCityList(key.toString())
-
-        var cityList: List<CityListEntity> = listOf()
-        RoomApp.getCityList(key) {
+        RoomApp.getCityList(cityListTabName) {
             val convertedList: List<Weather> = convertFromEntityToWeatherList(it)
             weatherList.onDataReceived(convertedList)
         }
@@ -57,7 +46,14 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
             Thread {
                 with(weather) {
                     RoomApp.getCityListDatabase().cityListDao()
-                        .updateWeater(city.lat, city.lon, city.name, temperature, feelsLike,dateUpdated)
+                        .updateWeater(
+                            city.lat,
+                            city.lon,
+                            city.name,
+                            temperature,
+                            feelsLike,
+                            dateUpdated
+                        )
                 }
 
             }.start()
@@ -66,12 +62,14 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
         }
     }
 
+
     private fun convertFromEntityToWeatherList(entityCityList: List<CityListEntity>): List<Weather> {
         return entityCityList.map {
             Weather(
                 city = City(it.cityName, lat = it.lat, lon = it.lon),
                 temperature = it.temperature,
-                feelsLike = it.feelsLike
+                feelsLike = it.feelsLike,
+                dateUpdated = it.updated
             )
         }
     }

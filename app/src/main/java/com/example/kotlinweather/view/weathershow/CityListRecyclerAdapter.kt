@@ -29,16 +29,14 @@ class CityListRecyclerAdapter(
         dataList[position].apply {
             city.also { binding.idCityName.text = it.name }
 
-//            if (!dateUpdated.equals(DEFAULT_DATE)){
+            if (!dateUpdated.equals(DEFAULT_DATE)){
 
                if (temperature>=0) {
                    binding.idCityTemp.text = "$dateUpdated $TEMP_PLUS$temperature"
                } else {
                    binding.idCityTemp.text =  "$dateUpdated $TEMP_MINUS$temperature"
                }
-//           }
-
-
+           }
 
 
             binding.root.setOnClickListener() {

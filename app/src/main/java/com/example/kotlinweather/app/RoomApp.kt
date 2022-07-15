@@ -34,7 +34,7 @@ class RoomApp : Application() {
 
         fun getCityList(key:CityListEnum, weatherList: WeatherCallBack<List<CityListEntity>>){
             Thread{
-                val list = RoomApp.getCityListDatabase().cityListDao().getCityList(key.toString())
+                val list = getCityListDatabase().cityListDao().getCityList(key.toString())
 
                 Handler(Looper.getMainLooper()).post{
                     weatherList.onDataReceived(list)

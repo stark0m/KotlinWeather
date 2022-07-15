@@ -7,7 +7,6 @@ import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.CityListEnum
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.model.WeatherCallBack
-import java.lang.Thread.sleep
 
 class CityListRepositoryHardLocalImpl : CityListRepository {
 
@@ -15,7 +14,6 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
 
     override fun getCityList(cityListEnum:CityListEnum ,weatherList: WeatherCallBack<List<Weather>>) {
 
-        val handler = Handler(Looper.getMainLooper())
                 when(cityListEnum){
                     CityListEnum.RUSSIAN -> weatherList.onDataReceived(getRussianCities())
                     CityListEnum.WORLD -> weatherList.onDataReceived(getWorldCities())
