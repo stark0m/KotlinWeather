@@ -82,6 +82,7 @@ class WeatherShowViewModel(
     override fun tryToShowWeather(weather: Weather) {
         vmLiveData.value = AppState.Loading
         vmLiveData.value = AppState.ShowWeater(weather)
+
     }
 
     override fun getAnotherCityList() {
@@ -108,6 +109,7 @@ class WeatherShowViewModel(
         ) { weatherFromRepository ->
             weatherFromRepository?.let {
                 vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
+                cityListRepository!!.updateWether(it)
             }
                 ?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
 

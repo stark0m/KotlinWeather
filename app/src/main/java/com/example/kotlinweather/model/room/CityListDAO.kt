@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.kotlinweather.domain.Weather
 
 @Dao
 interface CityListDAO {
@@ -13,5 +14,8 @@ interface CityListDAO {
     @Query("SELECT * FROM city_list_entity_table WHERE columnCityListName=:cityListName")
     fun getCityList(cityListName:String):List<CityListEntity>
 
+    @Query("UPDATE city_list_entity_table SET temperature=:temperatyre,feelsLike=:feelsLike WHERE lat=:lat AND lon=:lon AND cityName=:cityName")
+    fun updateWeater(lat:Double,lon:Double,cityName:String,temperatyre:Int,feelsLike:Int)
 
 }
+

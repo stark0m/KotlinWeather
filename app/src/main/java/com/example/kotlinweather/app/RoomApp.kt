@@ -14,7 +14,7 @@ class RoomApp : Application() {
 
     companion object {
         private var cityListDatabase: CityListDatabase? = null
-        private var appContext: RoomApp? = null
+        var appContext: RoomApp? = null
         private fun getContext() = appContext
         fun getCityListDatabase():CityListDatabase {
             if (cityListDatabase == null) {

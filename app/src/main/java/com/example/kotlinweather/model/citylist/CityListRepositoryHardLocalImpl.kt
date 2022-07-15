@@ -16,7 +16,7 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
 
         val handler = Handler(Looper.getMainLooper())
         Thread(){
-            sleep(2000L)
+//            sleep(2000L)
             handler.post(){
 
                 when(cityListEnum){
@@ -27,6 +27,10 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
             }
 
         }.start()
+    }
+
+    override fun updateWether(weather: Weather) {
+
     }
 
 
