@@ -14,6 +14,7 @@ import com.example.kotlinweather.model.RepositoryLocalImpl
 import com.example.kotlinweather.model.RepositoryRemoteRetrofitImpl
 import com.example.kotlinweather.model.citylist.CityListRepository
 import com.example.kotlinweather.model.citylist.CityListRepositoryHardLocalImpl
+import com.example.kotlinweather.model.citylist.CityListRepositoryRoomImpl
 import com.example.kotlinweather.viewmodel.AppState
 import com.example.kotlinweather.viewmodel.ViewModelInterface
 
@@ -21,7 +22,7 @@ class WeatherShowViewModel(
     application: Application,
 ) : AndroidViewModel(application), ViewModelInterface {
     private var repository: Repository? = null
-    private var cityListRepository: CityListRepository? = null
+    private lateinit var cityListRepository: CityListRepository
     private lateinit var cityListTabNameEnum: CityListEnum
     private val context = getApplication<Application>().applicationContext
     private val vmLiveData: MutableLiveData<AppState> = MutableLiveData<AppState>()
@@ -62,7 +63,7 @@ class WeatherShowViewModel(
     }
 
     private fun tryToreceiveCityList() {
-        cityListRepository!!.getCityList(cityListTabNameEnum!!) { result ->
+        cityListRepository!!.getCityList(cityListTabNameEnum) { result ->
             vmLiveData.postValue(AppState.ReceivedCityListSuccess(result))
         }
     }
@@ -72,9 +73,9 @@ class WeatherShowViewModel(
         /**
          * выбираем источник загрузки списков городов
          */
-        cityListRepository = when (1) {
+        cityListRepository = when (2) {
             1 -> CityListRepositoryHardLocalImpl()
-            else -> CityListRepositoryHardLocalImpl()
+            else -> CityListRepositoryRoomImpl()
         }
     }
 
@@ -90,16 +91,17 @@ class WeatherShowViewModel(
         cityListTabNameEnum = cityListTabNameEnum.getNext()
         cityListStringTabName = cityListTabNameEnum.toString()
 
-        cityListRepository?.let {
+        cityListRepository.let {
             it.getCityList(cityListTabNameEnum!!) {
                 vmLiveData.postValue(AppState.ReceivedCityListSuccess(it))
             }
         }
-            ?: vmLiveData.postValue(AppState.Error(IllegalStateException("Нет возможности загрузить данные")))
+
     }
 
     override fun updateWeatherInfo(weather: Weather) {
         chooseRepository()
+        chooseCityListRepository()
         vmLiveData.value = AppState.Loading
         repository?.getWeather(
             lat = weather.city.lat,
@@ -107,9 +109,11 @@ class WeatherShowViewModel(
             cityName = weather.city.name
 
         ) { weatherFromRepository ->
+            cityListRepository.updateWether(weatherFromRepository)
             weatherFromRepository?.let {
                 vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
-                cityListRepository!!.updateWether(it)
+
+
             }
                 ?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
 

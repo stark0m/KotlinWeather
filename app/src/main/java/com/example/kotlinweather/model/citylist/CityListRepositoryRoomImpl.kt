@@ -1,6 +1,7 @@
 package com.example.kotlinweather.model.citylist
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -11,44 +12,51 @@ import com.example.kotlinweather.model.room.CityListEntity
 import java.util.function.LongFunction
 
 class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator {
-  companion object{
-      private const val TAG="ROOMREPO"
-  }
+    companion object {
+        private const val TAG = "@@@"
+    }
+
+
+    private val sharedPreferencesRoom: SharedPreferences by lazy {
+        RoomApp.appContext!!.getSharedPreferences(ROOM_PREFS_FILE, Context.MODE_PRIVATE)
+    }
+
     override fun getCityList(key: CityListEnum, weatherList: WeatherCallBack<List<Weather>>) {
-        Log.i(TAG,"getCityList")
-        val isAppLaunchFirstTimeInDevice =
-            RoomApp.appContext?.getSharedPreferences(ROOM_PREFS_FILE, Context.MODE_PRIVATE)
-                ?.getBoolean(
-                    IS_FIRST_LAUNCH_APP, true
-                )!!
-        Log.i(TAG,"isAppLaunchFirstTimeInDevice= $isAppLaunchFirstTimeInDevice")
+        Log.i(TAG, "getCityList")
+        val isAppLaunchFirstTimeInDevice = sharedPreferencesRoom.getBoolean(
+            IS_FIRST_LAUNCH_APP, true
+        )
+        Log.i(TAG, "isAppLaunchFirstTimeInDevice= $isAppLaunchFirstTimeInDevice")
         if (isAppLaunchFirstTimeInDevice) {
-            Log.i(TAG,"launch first")
-            RoomApp.appContext?.getSharedPreferences(ROOM_PREFS_FILE, Context.MODE_PRIVATE)?.edit()
-                ?.putBoolean(ROOM_PREFS_FILE, false)
+            Log.i(TAG, "launch first")
+            sharedPreferencesRoom.edit().putBoolean(IS_FIRST_LAUNCH_APP, false).commit()
             putDefaultCitiesList()
+        }
 
-            Thread() {
-                val cityList =
-                    RoomApp.getCityListDatabase().cityListDao().getCityList(key.toString())
-                val convertedList: List<Weather> = convertFromEntityToWeatherList(cityList)
+//            val cityList =
+//                RoomApp.getCityListDatabase().cityListDao().getCityList(key.toString())
 
-                Handler(Looper.getMainLooper()).post() {
-                    weatherList.onDataReceived(convertedList)
+        var cityList: List<CityListEntity> = listOf()
+        RoomApp.getCityList(key) {
+            val convertedList: List<Weather> = convertFromEntityToWeatherList(it)
+            weatherList.onDataReceived(convertedList)
+        }
+
+
+    }
+
+    override fun updateWether(weather: Weather?) {
+        if (weather != null) {
+            Thread {
+                with(weather) {
+                    RoomApp.getCityListDatabase().cityListDao()
+                        .updateWeater(city.lat, city.lon, city.name, temperature, feelsLike)
                 }
-            }
+
+            }.start()
 
 
         }
-    }
-
-    override fun updateWether(weather: Weather) {
-        Thread(){
-            with(weather){
-                RoomApp.getCityListDatabase().cityListDao().updateWeater(city.lat,city.lon,city.name,temperature,feelsLike)
-            }
-
-        }.start()
     }
 
     private fun convertFromEntityToWeatherList(entityCityList: List<CityListEntity>): List<Weather> {
@@ -104,11 +112,13 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
     }
 
     private fun putCityListToDB(cityList: List<CityListEntity>) {
-        Thread() {
+
+        Thread {
             cityList.forEach {
                 RoomApp.getCityListDatabase().cityListDao().insert(it)
             }
-
         }.start()
+
+
     }
 }

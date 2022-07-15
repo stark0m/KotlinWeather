@@ -60,6 +60,12 @@ class OneCItyWeatherViewFragment : Fragment() {
             }
     }
 
+
+    override fun onResume() {
+
+        super.onResume()
+        viewModelWeatherShow.getWeatherList()
+    }
     private fun makeAction(appState: AppState) {
 
         when (appState) {
@@ -67,6 +73,7 @@ class OneCItyWeatherViewFragment : Fragment() {
             is AppState.UpdateWeatherInfo -> {
                 binding.progress.visibility = View.GONE
                 showRecievedWeather(appState.weather)
+
                 Snackbar.make(
                     binding.mainView,
                     "Данные обновлены",
