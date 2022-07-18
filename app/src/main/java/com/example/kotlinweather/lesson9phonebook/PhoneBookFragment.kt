@@ -2,8 +2,12 @@ package com.example.kotlinweather.lesson9phonebook
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.ContentResolver
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,23 +17,35 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinweather.databinding.FragmentPhoneBookBinding
+import com.example.kotlinweather.domain.PhoneBookContact
+import com.example.kotlinweather.model.WeatherCallBack
 
 class PhoneBookFragment : Fragment() {
     private var _binding: FragmentPhoneBookBinding? = null
     private val binding get() = _binding!!
-    private val recyclerAdapter: PhoneBookRecyclerAdapter by lazy { PhoneBookRecyclerAdapter() }
+    private val recyclerAdapter: PhoneBookRecyclerAdapter by lazy {
+        PhoneBookRecyclerAdapter(
+            callBack
+        )
+    }
     private lateinit var checkPhoneBookPermission: ActivityResultLauncher<String>
+    private val callBack = WeatherCallBack<PhoneBookContact> {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:${it.contactPhone}")
+        startActivity(intent)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkPhoneBookPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) {
-                showContacts()
-            } else {
-                infrormCustomerAboutDeclinePhoneBookAccess()
-            }
+        checkPhoneBookPermission =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+                if (it) {
+                    showContacts()
+                } else {
+                    infrormCustomerAboutDeclinePhoneBookAccess()
+                }
 
-        }
+            }
     }
 
     override fun onCreateView(
@@ -66,7 +82,7 @@ class PhoneBookFragment : Fragment() {
                         .setPositiveButton("Предостваить доступ") { _, _ ->
                             requestContactListPermission()
                         }
-                        .setNegativeButton("Отказать") { dialog, _ -> dialog.dismiss() ;closeFragment() }
+                        .setNegativeButton("Отказать") { dialog, _ -> dialog.dismiss();closeFragment() }
                         .create()
                         .show()
 
@@ -84,11 +100,9 @@ class PhoneBookFragment : Fragment() {
         checkPhoneBookPermission.launch(Manifest.permission.READ_CONTACTS)
     }
 
-    private fun closeFragment(){
+    private fun closeFragment() {
         requireActivity().supportFragmentManager.popBackStack()
     }
-
-
 
 
     private fun infrormCustomerAboutDeclinePhoneBookAccess() {
@@ -103,7 +117,72 @@ class PhoneBookFragment : Fragment() {
 
     private fun showContacts() {
 
-        TODO()
+        val contentResolver = requireContext().contentResolver
+        val cursorContentResolver = contentResolver.query(
+            ContactsContract.Contacts.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
+
+        cursorContentResolver?.let { cursor ->
+
+
+            if (cursor.moveToFirst()) {
+                do {
+
+                    val columnIndexName =
+                        cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+                    val contactName = cursor.getString(columnIndexName)
+
+                    val columnIndexId =
+                        cursor.getColumnIndex(ContactsContract.Contacts._ID)
+                    val contactId = cursor.getString(columnIndexId)
+
+                    val hasPhoneNumberIndex =
+                        cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)
+                    val hasPhoneNumbers = cursor.getInt(hasPhoneNumberIndex)
+
+
+                    if (hasPhoneNumbers > 0) {
+
+                        val pCursor = contentResolver.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            arrayOf(contactId.toString()),
+                            null
+                        )
+
+                        pCursor?.let { phonesCursor ->
+                            phonesCursor.moveToFirst()
+                            val phoneNumberIndex =
+                                phonesCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                            val phoneNumber = phonesCursor.getString(phoneNumberIndex)
+
+                            recyclerAdapter.addContact(
+                                PhoneBookContact(
+                                    contactName,
+                                    phoneNumber
+                                )
+                            )
+                        }
+                        pCursor?.close()
+
+                    }
+
+
+                } while (cursor.moveToNext())
+
+
+            }
+//            for (i in 0..cursor.count) {
+
+
+        }
+        cursorContentResolver?.close()
+        recyclerAdapter.notifyDataSetChanged()
     }
 
     private fun initRecycler() {

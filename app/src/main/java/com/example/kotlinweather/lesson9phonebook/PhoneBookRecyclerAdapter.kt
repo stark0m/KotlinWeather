@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.databinding.PhoneBookOneContactBinding
 import com.example.kotlinweather.domain.PhoneBookContact
+import com.example.kotlinweather.model.WeatherCallBack
 
-class PhoneBookRecyclerAdapter: RecyclerView.Adapter<PhoneBookRecyclerAdapter.ViewHolder>() {
+class PhoneBookRecyclerAdapter(val callBack: WeatherCallBack<PhoneBookContact>) : RecyclerView.Adapter<PhoneBookRecyclerAdapter.ViewHolder>() {
     private val contactList = mutableListOf<PhoneBookContact>()
 
     fun addContact(contact: PhoneBookContact){
@@ -26,7 +27,12 @@ class PhoneBookRecyclerAdapter: RecyclerView.Adapter<PhoneBookRecyclerAdapter.Vi
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = PhoneBookOneContactBinding.bind(holder.itemView)
         binding.idContactName.text = contactList[position].contactName
+        holder.itemView.setOnClickListener(){
+            contactList[position].run {
+                callBack.onDataReceived(PhoneBookContact(this.contactName,this.contactPhone))
+            }
 
+        }
     }
 
     override fun getItemCount()= contactList.size
