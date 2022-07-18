@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.databinding.PhoneBookOneContactBinding
-import com.example.kotlinweather.domain.ChoneBookContact
+import com.example.kotlinweather.domain.PhoneBookContact
 
 class PhoneBookRecyclerAdapter: RecyclerView.Adapter<PhoneBookRecyclerAdapter.ViewHolder>() {
-    private val contactList = mutableListOf<ChoneBookContact>()
+    private val contactList = mutableListOf<PhoneBookContact>()
 
-    fun addContact(contact: ChoneBookContact){
+    fun addContact(contact: PhoneBookContact){
         contactList.add(contact)
     }
 

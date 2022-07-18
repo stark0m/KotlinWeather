@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.lesson9phonebook.PhoneBookFragment
 import com.example.kotlinweather.view.onecityview.basefragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
@@ -71,7 +72,13 @@ class WeatherShowFragment : Fragment() {
     }
 
     private fun showPhoneBookFragment() {
-        TODO("Not yet implemented")
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .hide(this)
+            .add(R.id.container,PhoneBookFragment.newInstance())
+            .addToBackStack("")
+            .commit()
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
