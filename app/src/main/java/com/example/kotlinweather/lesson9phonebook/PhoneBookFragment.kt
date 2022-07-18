@@ -2,19 +2,18 @@ package com.example.kotlinweather.lesson9phonebook
 
 import android.Manifest
 import android.app.AlertDialog
-import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinweather.databinding.FragmentPhoneBookBinding
 import com.example.kotlinweather.domain.PhoneBookContact
@@ -85,7 +84,6 @@ class PhoneBookFragment : Fragment() {
                         .setNegativeButton("Отказать") { dialog, _ -> dialog.dismiss();closeFragment() }
                         .create()
                         .show()
-
 
                 } else {
                     requestContactListPermission()
@@ -171,15 +169,14 @@ class PhoneBookFragment : Fragment() {
                         pCursor?.close()
 
                     }
-
+                    else{
+                        recyclerAdapter.addContact(
+                            PhoneBookContact(contactName)
+                        )
+                    }
 
                 } while (cursor.moveToNext())
-
-
             }
-//            for (i in 0..cursor.count) {
-
-
         }
         cursorContentResolver?.close()
         recyclerAdapter.notifyDataSetChanged()

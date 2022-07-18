@@ -9,5 +9,7 @@
     <dimen name="card_inner_padding">5dp</dimen>
     <dimen name="float_button_margin">20dp</dimen>
     <dimen name="city_image_display_height">100dp</dimen>
+    <dimen name="dp10">10dp</dimen>
+    <dimen name="dp5">5dp</dimen>
 
 </resources>

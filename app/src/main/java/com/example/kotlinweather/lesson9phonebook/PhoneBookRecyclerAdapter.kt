@@ -26,13 +26,17 @@ class PhoneBookRecyclerAdapter(val callBack: WeatherCallBack<PhoneBookContact>) 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = PhoneBookOneContactBinding.bind(holder.itemView)
-        binding.idContactName.text = contactList[position].contactName
-        holder.itemView.setOnClickListener(){
-            contactList[position].run {
-                callBack.onDataReceived(PhoneBookContact(this.contactName,this.contactPhone))
-            }
+        contactList[position].let { contact->
+            binding.idContactName.text = contact.contactName
+            binding.idContactPhone.text= contact.contactPhone
+            holder.itemView.setOnClickListener(){
+                contact.run {
+                    callBack.onDataReceived(PhoneBookContact(this.contactName,this.contactPhone))
+                }
 
+            }
         }
+
     }
 
     override fun getItemCount()= contactList.size

@@ -1,7 +1,5 @@
 package com.example.kotlinweather.model.citylist
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.CityListEnum
