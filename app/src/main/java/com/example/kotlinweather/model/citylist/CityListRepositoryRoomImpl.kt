@@ -71,6 +71,8 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
     }
 
 
+
+
     private fun convertFromEntityToWeatherList(entityCityList: List<CityListEntity>): List<Weather> {
         return entityCityList.map {
             Weather(
@@ -132,6 +134,13 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
             }
 
 
+
+    }
+    override fun addLocation(weather: Weather, listEnum: CityListEnum) {
+        Thread{
+            val cityEntityList = converterFromWeatherToEntityList(listOf(weather),listEnum)
+            putCityListToDB(cityEntityList)
+        }.start()
 
     }
 }
