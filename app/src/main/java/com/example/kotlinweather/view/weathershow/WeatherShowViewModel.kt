@@ -122,6 +122,14 @@ class WeatherShowViewModel(
         vmLiveData.postValue(AppState.ShowGeocoder)
     }
 
+    override fun addCityToCurrentList(weather: Weather) {
+        cityListRepository.addLocation(weather,cityListTabNameEnum){result->
+            if (result) {
+                tryToreceiveCityList()
+            }
+        }
+    }
+
 
     private fun chooseRepository() {
         repository = if (isConnected()) {

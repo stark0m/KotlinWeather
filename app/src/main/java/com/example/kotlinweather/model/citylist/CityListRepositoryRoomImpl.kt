@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.kotlinweather.app.RoomApp
 import com.example.kotlinweather.domain.*
+import com.example.kotlinweather.model.AppCallback
 import com.example.kotlinweather.model.WeatherCallBack
 import com.example.kotlinweather.model.room.CityListEntity
 
@@ -22,28 +23,30 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
         RoomApp.appContext!!.getSharedPreferences(ROOM_PREFS_FILE, Context.MODE_PRIVATE)
     }
 
-    override fun getCityList(cityListTabName: CityListEnum, weatherList: WeatherCallBack<List<Weather>>) {
+    override fun getCityList(
+        cityListTabName: CityListEnum,
+        weatherList: WeatherCallBack<List<Weather>>
+    ) {
         Log.i(TAG, "getCityList")
         val isAppLaunchFirstTimeInDevice = sharedPreferencesRoom.getBoolean(
             IS_FIRST_LAUNCH_APP, true
         )
         Log.i(TAG, "isAppLaunchFirstTimeInDevice= $isAppLaunchFirstTimeInDevice")
 
-       Thread{
-           if (isAppLaunchFirstTimeInDevice) {
-               Log.i(TAG, "launch first")
-               sharedPreferencesRoom.edit().putBoolean(IS_FIRST_LAUNCH_APP, false).apply()
-               putDefaultCitiesList()
-           }
+        Thread {
+            if (isAppLaunchFirstTimeInDevice) {
+                Log.i(TAG, "launch first")
+                sharedPreferencesRoom.edit().putBoolean(IS_FIRST_LAUNCH_APP, false).apply()
+                putDefaultCitiesList()
+            }
 
-           RoomApp.getCityList(cityListTabName) {
-               val convertedList: List<Weather> = convertFromEntityToWeatherList(it)
-               Handler(Looper.getMainLooper()).post{
-                   weatherList.onDataReceived(convertedList)
-               }
-           }
-       }.start()
-
+            RoomApp.getCityList(cityListTabName) {
+                val convertedList: List<Weather> = convertFromEntityToWeatherList(it)
+                Handler(Looper.getMainLooper()).post {
+                    weatherList.onDataReceived(convertedList)
+                }
+            }
+        }.start()
 
 
     }
@@ -69,8 +72,6 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
 
         }
     }
-
-
 
 
     private fun convertFromEntityToWeatherList(entityCityList: List<CityListEntity>): List<Weather> {
@@ -129,17 +130,20 @@ class CityListRepositoryRoomImpl : CityListRepository, CityListRepositoryCreator
     private fun putCityListToDB(cityList: List<CityListEntity>) {
 
 
-            cityList.forEach {
-                RoomApp.getCityListDatabase().cityListDao().insert(it)
-            }
-
+        cityList.forEach {
+            RoomApp.getCityListDatabase().cityListDao().insert(it)
+        }
 
 
     }
-    override fun addLocation(weather: Weather, listEnum: CityListEnum) {
-        Thread{
-            val cityEntityList = converterFromWeatherToEntityList(listOf(weather),listEnum)
+
+    override fun addLocation(weather: Weather, listEnum: CityListEnum,callback: AppCallback<Boolean>) {
+        Thread {
+            val cityEntityList = converterFromWeatherToEntityList(listOf(weather), listEnum)
             putCityListToDB(cityEntityList)
+            Handler(Looper.getMainLooper()).post{
+                callback.onClick(true)
+            }
         }.start()
 
     }

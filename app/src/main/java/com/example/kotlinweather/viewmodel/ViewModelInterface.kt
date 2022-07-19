@@ -8,4 +8,5 @@ interface ViewModelInterface {
     fun getAnotherCityList()
     fun updateWeatherInfo(weather: Weather)
     fun tryToShowGeocoder()
+    fun addCityToCurrentList(weather: Weather)
 }
