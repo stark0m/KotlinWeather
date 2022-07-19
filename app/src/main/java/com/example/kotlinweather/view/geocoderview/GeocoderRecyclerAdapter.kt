@@ -5,21 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.databinding.LocationOneItemBinding
-import com.example.kotlinweather.domain.PhoneBookContact
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.model.AppCallback
-import com.example.kotlinweather.model.WeatherCallBack
 
-class GeocoderRecyclerAdapter(private val locationList:MutableList<Weather> ,private val addButton: AppCallback<Weather>,private val showMapButton:AppCallback<Weather>) : RecyclerView.Adapter<GeocoderRecyclerAdapter.ViewHolder>() {
+class GeocoderRecyclerAdapter(private val locationList:List<Weather> ,private val addButton: AppCallback<Weather>,private val showMapButton:AppCallback<Weather>) : RecyclerView.Adapter<GeocoderRecyclerAdapter.ViewHolder>() {
 
-    fun addLocation(weather:Weather){
 
-        locationList.add(weather)
-    }
 
-    fun clearAdapterList(){
-        locationList.clear()
-    }
     inner class ViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView){
 
     }

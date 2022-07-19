@@ -1,26 +1,25 @@
 package com.example.kotlinweather.view.geocoderview
 
-import android.Manifest
 import android.app.AlertDialog
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinweather.databinding.FragmentGeocoderBinding
+import com.example.kotlinweather.domain.GPS_ACCESS_PERMISSION
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.model.AppCallback
 import com.example.kotlinweather.model.geocoder.RepositoreGeocoderImpl
 import com.example.kotlinweather.model.geocoder.RepositoryGeocoder
 import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
 
-private const val GPS_ACCESS_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
 
 class GeocoderFragment : Fragment() {
     private var _binding: FragmentGeocoderBinding? = null
@@ -34,8 +33,30 @@ class GeocoderFragment : Fragment() {
             } else {
                 infrormCustomerAboutDeclineGPRSAccess()
             }
-
         }
+
+    private val viewModelWeatherShow: WeatherShowViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(WeatherShowViewModel::class.java)
+    }
+
+    private val geocoderRepository: RepositoryGeocoder by lazy {
+        RepositoreGeocoderImpl()
+    }
+
+    private val addButtonClick = AppCallback<Weather> {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Добавить ${it.city.name} в текущий список локаций ?")
+            .setPositiveButton("Добавить") { _, _ ->
+                viewModelWeatherShow.addCityToCurrentList(it)
+
+            }
+            .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+    private val showMapButtonClick = AppCallback<Weather> {
+        showMapByCoordinates(it.city.lat,it.city.lon)
+    }
 
     private fun showMapByLocalCoordinates() {
         geocoderRepository.getGPSLocation {
@@ -51,38 +72,10 @@ class GeocoderFragment : Fragment() {
             .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }.show()
     }
 
-    private val viewModelWeatherShow: WeatherShowViewModel by lazy {
-        ViewModelProvider(requireActivity()).get(WeatherShowViewModel::class.java)
-    }
-
-    private val geocoderRepository: RepositoryGeocoder by lazy {
-        RepositoreGeocoderImpl()
-    }
-
-    private val addButtonClick = AppCallback<Weather> {
-
-        AlertDialog.Builder(requireContext())
-            .setTitle("Добавить ${it.city.name} в текущий список локаций ?")
-            .setPositiveButton("Добавить") { _, _ ->
-                viewModelWeatherShow.addCityToCurrentList(it)
-
-            }
-            .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
-            .show()
-    }
-
-    private val showMapButtonClick = AppCallback<Weather> {
-        showMapByCoordinates(it.city.lat,it.city.lon)
-    }
-
     private fun showMapByCoordinates(lat: Double, lon: Double) {
         viewModelWeatherShow.openGoogleMap(lat, lon)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,8 +89,12 @@ class GeocoderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.locationsRecycler.layoutManager = LinearLayoutManager(requireContext())
+        initRecyclerView()
         initListeners()
+    }
+
+    private fun initRecyclerView() {
+        binding.locationsRecycler.layoutManager = LinearLayoutManager(requireContext())
     }
 
     private fun initListeners() {
@@ -106,7 +103,7 @@ class GeocoderFragment : Fragment() {
                 if (it.toString() != "") {
                     geocoderRepository.getLocationList(it.toString()) {
                         binding.locationsRecycler.adapter = GeocoderRecyclerAdapter(
-                            it.toMutableList(),
+                            it,
                             addButtonClick,
                             showMapButtonClick
                         )
@@ -120,14 +117,14 @@ class GeocoderFragment : Fragment() {
 
         binding.myLocationButton.setOnClickListener{
             val isGPRSAccess = ContextCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
+                requireContext(), GPS_ACCESS_PERMISSION
             )
 
 
             if (isGPRSAccess==PERMISSION_GRANTED){
                 showMapByLocalCoordinates()
             } else {
-                checkGPSPermission.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                checkGPSPermission.launch(GPS_ACCESS_PERMISSION)
             }
         }
     }
@@ -138,7 +135,6 @@ class GeocoderFragment : Fragment() {
     }
 
     companion object {
-
         fun newInstance() =
             GeocoderFragment()
     }

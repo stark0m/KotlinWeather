@@ -1,5 +1,7 @@
 package com.example.kotlinweather.domain
 
+import android.Manifest
+
 const val BROADCAST_INTENT_FILTER = "BROADCAST_INTENT_FILTER"
 const val TAG_WEATHER_TO_SHOW = "TAG_WEATHER_TO_SHOW"
 const val WEATHET_DTO_KEY = "WEATHET_DTO_KEY"
@@ -16,6 +18,8 @@ const val ROOM_PREFS_FILE = "ROOM_PREFS_FILE"
 const val TEMP_PLUS = "T +"
 const val TEMP_MINUS = "T -"
 const val DEFAULT_DATE="00"
+
+const val GPS_ACCESS_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
 
 const val ROOM_DB_NAME= "CITY_LIST_DB"
 

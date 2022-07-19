@@ -1,14 +1,13 @@
 package com.example.kotlinweather.view.map
 
 import android.app.AlertDialog
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.kotlinweather.R
 import com.example.kotlinweather.domain.City
@@ -16,7 +15,6 @@ import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.model.geocoder.RepositoreGeocoderImpl
 import com.example.kotlinweather.model.geocoder.RepositoryGeocoder
 import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
