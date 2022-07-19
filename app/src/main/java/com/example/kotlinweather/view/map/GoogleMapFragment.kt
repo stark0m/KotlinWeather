@@ -1,12 +1,21 @@
 package com.example.kotlinweather.view.map
 
+import android.app.AlertDialog
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.kotlinweather.R
+import com.example.kotlinweather.domain.City
+import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.model.geocoder.RepositoreGeocoderImpl
+import com.example.kotlinweather.model.geocoder.RepositoryGeocoder
+import com.example.kotlinweather.view.weathershow.WeatherShowViewModel
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,9 +26,14 @@ import com.google.android.gms.maps.model.MarkerOptions
 
 
 private const val LATLANG = "LATLANG"
-class GoogleMapFragment : Fragment() {
 
-    private lateinit var latLng:LatLng
+class GoogleMapFragment : Fragment() {
+    val handler = Handler(Looper.getMainLooper())
+    private lateinit var latLng: LatLng
+    private val viewModelWeatherShow: WeatherShowViewModel by lazy {
+        ViewModelProvider(requireActivity()).get(WeatherShowViewModel::class.java)
+    }
+    private val repositoreGeocoderImpl: RepositoryGeocoder by lazy { RepositoreGeocoderImpl() }
     private val callback = OnMapReadyCallback { googleMap ->
         /**
          * Manipulates the map once available.
@@ -32,6 +46,37 @@ class GoogleMapFragment : Fragment() {
          */
         googleMap.addMarker(MarkerOptions().position(latLng).title("Marker "))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        googleMap.setOnMapClickListener {
+
+        }
+    }
+
+    val longClickListener = GoogleMap.OnMapLongClickListener {
+        val lat = it.latitude
+        val lon = it.longitude
+        Thread {
+            val locationName = repositoreGeocoderImpl.getLocationByCoordinates(lat, lon)
+
+
+            handler.post{
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Добавить $locationName в текущий список локаций?")
+                    .setNegativeButton("Нет") { dialog, _ -> dialog.dismiss() }
+                    .setPositiveButton("Добавить") { _, _ ->
+                        viewModelWeatherShow.addCityToCurrentList(Weather(City(locationName, lat, lon)))
+
+                    }.show()
+            }
+
+
+        }.start()
+
+
+
+
+
+
+
     }
 
     override fun onCreateView(
@@ -45,24 +90,26 @@ class GoogleMapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let{
+        arguments?.let {
             latLng = it.getParcelable(LATLANG)!!
         }
 
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync{
-            it.addMarker(MarkerOptions().position(latLng).title("Marker "))
-            it.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        mapFragment?.getMapAsync { map ->
+            map.addMarker(MarkerOptions().position(latLng).title("Marker "))
+            map.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+            map.setOnMapLongClickListener(longClickListener)
+
         }
 
 
     }
 
-    companion object{
-        fun newInstance(latLng:LatLng)=GoogleMapFragment().apply  {
+    companion object {
+        fun newInstance(latLng: LatLng) = GoogleMapFragment().apply {
             arguments = Bundle().apply {
-                putParcelable(LATLANG,latLng)
+                putParcelable(LATLANG, latLng)
             }
 
         }

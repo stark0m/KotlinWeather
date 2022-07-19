@@ -1,6 +1,7 @@
 package com.example.kotlinweather.model.geocoder
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
 import android.location.Address
@@ -24,6 +25,7 @@ class RepositoreGeocoderImpl : RepositoryGeocoder {
 
 
         Thread {
+
             val addresses = geoCoder.getFromLocationName(address, 5)
             if (addresses.size > 0) {
                 val resultWeatherList = convertAddressListToWeatherList(addresses)
@@ -36,10 +38,12 @@ class RepositoreGeocoderImpl : RepositoryGeocoder {
 
     private fun convertAddressListToWeatherList(addresses: List<Address>): List<Weather> {
 
-        return addresses.map { Weather(City(it.featureName, it.latitude, it.latitude)) }
+        return addresses.map {
+            Weather(City(it.locality?:"", it.latitude, it.longitude)) }
 
     }
 
+    @SuppressLint("MissingPermission")
     override fun getGPSLocation(callback: AppCallback<Location?>) {
 
         if (ActivityCompat.checkSelfPermission(context!!,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED) {
@@ -55,5 +59,9 @@ class RepositoreGeocoderImpl : RepositoryGeocoder {
         }.start()
 
 
+    }
+
+    override fun getLocationByCoordinates(lat: Double, lon: Double): String {
+        return geoCoder.getFromLocation(lat,lon,1).getOrNull(0)?.locality?:"empty"
     }
 }
