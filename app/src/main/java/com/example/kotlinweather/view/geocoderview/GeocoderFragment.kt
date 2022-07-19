@@ -72,7 +72,11 @@ class GeocoderFragment : Fragment() {
     }
 
     private val showMapButtonClick = AppCallback<Weather> {
-        // TODO:  
+        showMapByCoordinates(it.city.lat,it.city.lon)
+    }
+
+    private fun showMapByCoordinates(lat: Double, lon: Double) {
+        viewModelWeatherShow.openGoogleMap(lat, lon)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

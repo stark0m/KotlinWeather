@@ -30,7 +30,7 @@ class GoogleMapFragment : Fragment() {
          * install it inside the SupportMapFragment. This method will only be triggered once the
          * user has installed Google Play services and returned to the app.
          */
-
+        googleMap.addMarker(MarkerOptions().position(latLng).title("Marker "))
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
     }
 
@@ -51,7 +51,10 @@ class GoogleMapFragment : Fragment() {
 
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
-        mapFragment?.getMapAsync(callback)
+        mapFragment?.getMapAsync{
+            it.addMarker(MarkerOptions().position(latLng).title("Marker "))
+            it.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        }
 
 
     }
