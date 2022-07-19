@@ -16,8 +16,10 @@ import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.lesson9phonebook.PhoneBookFragment
 import com.example.kotlinweather.view.geocoderview.GeocoderFragment
+import com.example.kotlinweather.view.map.GoogleMapFragment
 import com.example.kotlinweather.view.onecityview.basefragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 
 class WeatherShowFragment : Fragment() {
@@ -157,7 +159,12 @@ class WeatherShowFragment : Fragment() {
             }
 
             is AppState.ShowMapOn -> {
-                Toast.makeText(requireContext(), "${state.lat} ${state.lon}", Toast.LENGTH_SHORT).show()
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, GoogleMapFragment.newInstance(LatLng(state.lat,state.lon)))
+                    .addToBackStack("")
+                    .commit()
+
             }
             is AppState.ReceivedCityListSuccess -> {
                 updateCityList(state.cityList)
