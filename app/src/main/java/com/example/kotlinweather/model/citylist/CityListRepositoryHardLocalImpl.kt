@@ -15,6 +15,7 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
                 when(cityListEnum){
                     CityListEnum.RUSSIAN -> weatherList.onDataReceived(getRussianCities())
                     CityListEnum.WORLD -> weatherList.onDataReceived(getWorldCities())
+                    else -> {}
                 }
 
 
