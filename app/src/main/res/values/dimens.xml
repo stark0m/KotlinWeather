@@ -17,5 +17,6 @@
     <dimen name="sp16">16sp</dimen>
     <dimen name="float_add_city_button_margin">100dp</dimen>
     <dimen name="dp24">24dp</dimen>
+    <dimen name="dp35">35dp</dimen>
 
 </resources>

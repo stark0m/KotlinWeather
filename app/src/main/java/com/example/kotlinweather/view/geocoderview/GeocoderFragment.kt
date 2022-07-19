@@ -116,6 +116,7 @@ class GeocoderFragment : Fragment() {
         }
 
         binding.myLocationButton.setOnClickListener{
+
             val isGPRSAccess = ContextCompat.checkSelfPermission(
                 requireContext(), GPS_ACCESS_PERMISSION
             )
