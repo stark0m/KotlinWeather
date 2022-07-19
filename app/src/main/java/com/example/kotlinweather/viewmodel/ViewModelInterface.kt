@@ -7,4 +7,5 @@ interface ViewModelInterface {
     fun tryToShowWeather(weather: Weather)
     fun getAnotherCityList()
     fun updateWeatherInfo(weather: Weather)
+    fun tryToShowGeocoder()
 }

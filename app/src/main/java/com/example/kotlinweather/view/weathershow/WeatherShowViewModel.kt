@@ -118,6 +118,10 @@ class WeatherShowViewModel(
         }
     }
 
+    override fun tryToShowGeocoder() {
+        vmLiveData.postValue(AppState.ShowGeocoder)
+    }
+
 
     private fun chooseRepository() {
         repository = if (isConnected()) {

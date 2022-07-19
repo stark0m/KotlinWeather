@@ -15,6 +15,7 @@ import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.lesson9phonebook.PhoneBookFragment
+import com.example.kotlinweather.view.geocoderview.GeocoderFragment
 import com.example.kotlinweather.view.onecityview.basefragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
@@ -112,6 +113,9 @@ class WeatherShowFragment : Fragment() {
         binding.floatButtonId.setOnClickListener {
             viewModelWeatherShow.getAnotherCityList()
         }
+        binding.floatButtonAddCity.setOnClickListener{
+            viewModelWeatherShow.tryToShowGeocoder()
+        }
     }
 
     private fun initRecyclerVIew() {
@@ -138,6 +142,14 @@ class WeatherShowFragment : Fragment() {
             }
             AppState.Loading -> {
                 binding.progress.visibility = View.VISIBLE
+            }
+            AppState.ShowGeocoder -> {
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .hide(this)
+                    .add(R.id.container, GeocoderFragment.newInstance())
+                    .addToBackStack("")
+                    .commit()
             }
             is AppState.Success -> {
                 binding.progress.visibility = View.GONE
