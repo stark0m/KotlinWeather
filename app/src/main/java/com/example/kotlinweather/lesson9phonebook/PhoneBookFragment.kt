@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kotlinweather.databinding.FragmentPhoneBookBinding
 import com.example.kotlinweather.domain.PhoneBookContact
 import com.example.kotlinweather.model.WeatherCallBack
+
 private const val MANIFEST_PERMISSION_READ_CONTACTS = Manifest.permission.READ_CONTACTS
+
 class PhoneBookFragment : Fragment() {
     private var _binding: FragmentPhoneBookBinding? = null
     private val binding get() = _binding!!
@@ -65,32 +67,30 @@ class PhoneBookFragment : Fragment() {
     }
 
     private fun checkPhoneBookAccessPermitions() {
-        requireContext().let {
-            if (ContextCompat.checkSelfPermission(
-                    it,
-                    MANIFEST_PERMISSION_READ_CONTACTS
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                showContacts()
-            } else
+        val permissionsReadContact = ContextCompat.checkSelfPermission(
+            requireContext(), MANIFEST_PERMISSION_READ_CONTACTS
+        )
 
-                if (shouldShowRequestPermissionRationale(MANIFEST_PERMISSION_READ_CONTACTS)) {
+        if (permissionsReadContact == PackageManager.PERMISSION_GRANTED) {
+            showContacts()
+        } else {
+            if (shouldShowRequestPermissionRationale(MANIFEST_PERMISSION_READ_CONTACTS)) {
 
-                    AlertDialog
-                        .Builder(it)
-                        .setMessage("Доступ к контактам необходим для нормального функционирования приложения")
-                        .setPositiveButton("Предостваить доступ") { _, _ ->
-                            requestContactListPermission()
-                        }
-                        .setNegativeButton("Отказать") { dialog, _ -> dialog.dismiss();closeFragment() }
-                        .create()
-                        .show()
+                AlertDialog
+                    .Builder(requireContext())
+                    .setMessage("Доступ к контактам необходим для нормального функционирования приложения")
+                    .setPositiveButton("Предостваить доступ") { _, _ ->
+                        requestContactListPermission()
+                    }
+                    .setNegativeButton("Отказать") { dialog, _ -> dialog.dismiss();closeFragment() }
+                    .create()
+                    .show()
 
-                } else {
-                    requestContactListPermission()
-                }
-
+            } else {
+                requestContactListPermission()
+            }
         }
+
 
     }
 
@@ -144,8 +144,7 @@ class PhoneBookFragment : Fragment() {
 
                     if (hasPhoneNumbers > 0) {
                         showFirstPhoneNumber(contentResolver, contactId, contactName)
-                    }
-                    else{
+                    } else {
                         showContactWitoutPhoneNumber(contactName)
                     }
 
