@@ -47,8 +47,8 @@ class RepositoryRemoteRetrofitImpl : Repository {
                             city = City(cityName, lat, lon),
                             temperature = responce.fact.temp,
                             feelsLike = responce.fact.feels_like,
-                            icon = responce.fact.icon
-
+                            icon = responce.fact.icon,
+                            dateUpdated = responce.forecast.date
                         )
                         weather.onDataReceived(weatherReceived)
                     } else {

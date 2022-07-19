@@ -8,7 +8,9 @@ data class Weather(
     val city: City = getDefaultCity(),
     val temperature: Int = 0,
     val feelsLike: Int = 0,
-    val icon: String? = "bkn_n"
+    val icon: String? = "bkn_n",
+    val dateUpdated: String = DEFAULT_DATE
+
 ) : Parcelable
 
 fun getDefaultCity() = City("Moscow", 55.755826, 37.617299900000035)

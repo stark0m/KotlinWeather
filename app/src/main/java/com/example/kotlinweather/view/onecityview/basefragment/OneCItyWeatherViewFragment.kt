@@ -27,7 +27,7 @@ class OneCItyWeatherViewFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var weatherToShow: Weather
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
-        ViewModelProvider(this).get(WeatherShowViewModel::class.java)
+        ViewModelProvider(requireActivity()).get(WeatherShowViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,18 +60,18 @@ class OneCItyWeatherViewFragment : Fragment() {
             }
     }
 
+
+
     private fun makeAction(appState: AppState) {
 
         when (appState) {
 
             is AppState.UpdateWeatherInfo -> {
+
                 binding.progress.visibility = View.GONE
                 showRecievedWeather(appState.weather)
-                Snackbar.make(
-                    binding.mainView,
-                    "Данные обновлены",
-                    Snackbar.LENGTH_LONG
-                ).show()
+
+
             }
             AppState.Loading -> {
                 binding.progress.visibility = View.VISIBLE
@@ -126,6 +126,7 @@ class OneCItyWeatherViewFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+        viewModelWeatherShow.getWeatherList()
     }
 
     companion object {
