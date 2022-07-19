@@ -14,4 +14,5 @@
     <string name="lat_0_lon_0_default">lat:0 lon:0</string>
     <string name="add">Добавить</string>
     <string name="map">Карта</string>
+    <string name="enter_address">Введите адрес</string>
 </resources>
