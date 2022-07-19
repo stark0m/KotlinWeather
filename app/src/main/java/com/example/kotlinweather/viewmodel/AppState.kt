@@ -8,6 +8,8 @@ sealed class AppState {
     data class Error(val error: Throwable) : AppState()
     data class ShowWeater(val weather: Weather) : AppState()
     data class UpdateWeatherInfo(val weather: Weather) : AppState()
+    data class ShowMapOn(val lat:Double,val lon:Double):AppState()
     object ShowGeocoder : AppState()
     object Loading : AppState()
+
 }

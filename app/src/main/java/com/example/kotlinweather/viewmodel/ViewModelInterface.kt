@@ -9,4 +9,5 @@ interface ViewModelInterface {
     fun updateWeatherInfo(weather: Weather)
     fun tryToShowGeocoder()
     fun addCityToCurrentList(weather: Weather)
+    fun openGoogleMap(lat: Double, lon: Double)
 }

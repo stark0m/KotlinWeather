@@ -155,6 +155,10 @@ class WeatherShowFragment : Fragment() {
                 binding.progress.visibility = View.GONE
                 Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
             }
+
+            is AppState.ShowMapOn -> {
+                Toast.makeText(requireContext(), "${state.lat} ${state.lon}", Toast.LENGTH_SHORT).show()
+            }
             is AppState.ReceivedCityListSuccess -> {
                 updateCityList(state.cityList)
                 binding.progress.visibility = View.GONE

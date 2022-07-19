@@ -130,6 +130,10 @@ class WeatherShowViewModel(
         }
     }
 
+    override fun openGoogleMap(lat: Double, lon: Double) {
+        vmLiveData.postValue(AppState.ShowMapOn(lat,lon))
+    }
+
 
     private fun chooseRepository() {
         repository = if (isConnected()) {
