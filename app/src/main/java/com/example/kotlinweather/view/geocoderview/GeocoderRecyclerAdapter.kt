@@ -10,8 +10,7 @@ import com.example.kotlinweather.domain.Weather
 import com.example.kotlinweather.model.AppCallback
 import com.example.kotlinweather.model.WeatherCallBack
 
-class GeocoderRecyclerAdapter(private val addButton: AppCallback<Weather>,private val showMapButton:AppCallback<Weather>) : RecyclerView.Adapter<GeocoderRecyclerAdapter.ViewHolder>() {
-    private val locationList = mutableListOf<Weather>()
+class GeocoderRecyclerAdapter(private val locationList:MutableList<Weather> ,private val addButton: AppCallback<Weather>,private val showMapButton:AppCallback<Weather>) : RecyclerView.Adapter<GeocoderRecyclerAdapter.ViewHolder>() {
 
     fun addLocation(weather:Weather){
 

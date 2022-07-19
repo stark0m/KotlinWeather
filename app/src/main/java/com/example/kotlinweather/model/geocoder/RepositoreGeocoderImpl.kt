@@ -16,7 +16,7 @@ class RepositoreGeocoderImpl:RepositoryGeocoder {
 
 
         Thread{
-            val addresses = geoCoder.getFromLocationName(address, 30)
+            val addresses = geoCoder.getFromLocationName(address, 5)
             if (addresses.size > 0) {
                 val resultWeatherList = convertAddressListToWeatherList(addresses)
                 Handler(Looper.getMainLooper()).post{
