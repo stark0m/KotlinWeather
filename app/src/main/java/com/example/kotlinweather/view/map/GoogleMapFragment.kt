@@ -26,55 +26,38 @@ import com.google.android.gms.maps.model.MarkerOptions
 private const val LATLANG = "LATLANG"
 
 class GoogleMapFragment : Fragment() {
-    val handler = Handler(Looper.getMainLooper())
+    private val handler = Handler(Looper.getMainLooper())
     private lateinit var latLng: LatLng
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
         ViewModelProvider(requireActivity()).get(WeatherShowViewModel::class.java)
     }
-    private val repositoreGeocoderImpl: RepositoryGeocoder by lazy { RepositoreGeocoderImpl() }
-    private val callback = OnMapReadyCallback { googleMap ->
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        googleMap.addMarker(MarkerOptions().position(latLng).title("Marker "))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        googleMap.setOnMapClickListener {
-
-        }
-    }
-
-    val longClickListener = GoogleMap.OnMapLongClickListener {
+    private val longClickListener = GoogleMap.OnMapLongClickListener {
         val lat = it.latitude
         val lon = it.longitude
         Thread {
-            val locationName = repositoreGeocoderImpl.getLocationByCoordinates(lat, lon)
+            val locationName = viewModelWeatherShow.getGeocoder().getLocationByCoordinates(lat, lon)
 
 
-            handler.post{
+            handler.post {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Добавить $locationName в текущий список локаций?")
                     .setNegativeButton("Нет") { dialog, _ -> dialog.dismiss() }
                     .setPositiveButton("Добавить") { _, _ ->
-                        viewModelWeatherShow.addCityToCurrentList(Weather(City(locationName, lat, lon)))
+                        viewModelWeatherShow.addCityToCurrentList(
+                            Weather(
+                                City(
+                                    locationName,
+                                    lat,
+                                    lon
+                                )
+                            )
+                        )
 
                     }.show()
             }
 
 
         }.start()
-
-
-
-
-
-
-
     }
 
     override fun onCreateView(
