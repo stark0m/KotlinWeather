@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kotlinweather.R
 import com.example.kotlinweather.databinding.WeatherShowFragmentBinding
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.lesson9phonebook.PhoneBookFragment
 import com.example.kotlinweather.view.onecityview.basefragment.OneCItyWeatherViewFragment
 import com.example.kotlinweather.viewmodel.AppState
 import com.google.android.material.snackbar.Snackbar
@@ -45,15 +44,42 @@ class WeatherShowFragment : Fragment() {
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.topbarmenu,menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = WeatherShowFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
+        setHasOptionsMenu(true)
         return view
     }
 
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.phone_book ->{
+                showPhoneBookFragment()
+            }
+            else ->{}
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showPhoneBookFragment() {
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .hide(this)
+            .add(R.id.container,PhoneBookFragment.newInstance())
+            .addToBackStack("")
+            .commit()
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
