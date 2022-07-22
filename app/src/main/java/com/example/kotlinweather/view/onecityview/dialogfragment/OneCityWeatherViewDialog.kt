@@ -21,8 +21,7 @@ class OneCityWeatherViewDialog(val weather: Weather) : BottomSheetDialogFragment
         savedInstanceState: Bundle?
     ): View {
         _binding = WeatherOneCityShowDialogBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
 
     }
 

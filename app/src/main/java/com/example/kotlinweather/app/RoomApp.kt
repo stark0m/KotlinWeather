@@ -17,6 +17,8 @@ class RoomApp : Application() {
 
     }
 
+
+
     companion object {
         private var cityListDatabase: CityListDatabase? = null
         var appContext: RoomApp? = null
@@ -42,6 +44,8 @@ class RoomApp : Application() {
             }.start()
 
         }
+
+
     }
 
 }

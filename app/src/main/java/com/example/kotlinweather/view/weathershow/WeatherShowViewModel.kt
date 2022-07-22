@@ -3,6 +3,7 @@ package com.example.kotlinweather.view.weathershow
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.kotlinweather.domain.CITY_LIST_KEY_FILE_NAME
@@ -15,6 +16,8 @@ import com.example.kotlinweather.model.RepositoryRemoteRetrofitImpl
 import com.example.kotlinweather.model.citylist.CityListRepository
 import com.example.kotlinweather.model.citylist.CityListRepositoryHardLocalImpl
 import com.example.kotlinweather.model.citylist.CityListRepositoryRoomImpl
+import com.example.kotlinweather.model.geocoder.RepositoreGeocoderImpl
+import com.example.kotlinweather.model.geocoder.RepositoryGeocoder
 import com.example.kotlinweather.viewmodel.AppState
 import com.example.kotlinweather.viewmodel.ViewModelInterface
 
@@ -26,6 +29,21 @@ class WeatherShowViewModel(
     private lateinit var cityListTabNameEnum: CityListEnum
     private val context = getApplication<Application>().applicationContext
     private val vmLiveData: MutableLiveData<AppState> = MutableLiveData<AppState>()
+    private val geocoderRepository: RepositoryGeocoder by lazy {
+        RepositoreGeocoderImpl()
+    }
+
+    fun getGeocoder() = geocoderRepository
+
+
+    fun isOnline(context:Context):Boolean {
+
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.getActiveNetworkInfo();
+
+        return (netInfo != null && netInfo.isConnected());
+    }
+
     private val sharedPreferences: SharedPreferences by lazy {
         context.getSharedPreferences(CITY_LIST_KEY_FILE_NAME, Context.MODE_PRIVATE)
     }
@@ -132,6 +150,15 @@ class WeatherShowViewModel(
 
     override fun openGoogleMap(lat: Double, lon: Double) {
         vmLiveData.postValue(AppState.ShowMapOn(lat,lon))
+    }
+
+    override fun tryToShowLocaleLocation() {
+
+        geocoderRepository.getGPSLocation {
+            it?.let {
+                openGoogleMap(it.latitude, it.longitude)
+            }
+        }
     }
 
 

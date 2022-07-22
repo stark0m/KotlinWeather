@@ -4,9 +4,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,14 +31,26 @@ import com.google.android.material.snackbar.Snackbar
 class WeatherShowFragment : Fragment() {
     private var _binding: WeatherShowFragmentBinding? = null
     private val binding get() = _binding!!
-//    private val viewModelWeatherShow: WeatherShowViewModel by activityViewModels()
+
+    val networkRequest = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+        .build()
+
+
+
     private val viewModelWeatherShow: WeatherShowViewModel by lazy {
         ViewModelProvider(requireActivity()).get(WeatherShowViewModel::class.java)
     }
 
+
+
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(p0: Context?, p1: Intent?) {
-            p1?.let { Toast.makeText(requireContext(), "${it.action}", Toast.LENGTH_SHORT).show() }
+
+
+            p1?.let { Toast.makeText(requireContext(), "${viewModelWeatherShow.isOnline(requireContext())}", Toast.LENGTH_SHORT).show() }
 
         }
 
@@ -57,9 +75,8 @@ class WeatherShowFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = WeatherShowFragmentBinding.inflate(inflater, container, false)
-        val view = binding.root
         setHasOptionsMenu(true)
-        return view
+        return binding.root
     }
 
 
@@ -98,9 +115,13 @@ class WeatherShowFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerForBroadcastReceiver()
+    }
+
+    private fun registerForBroadcastReceiver() {
         requireContext().registerReceiver(
             broadcastReceiver,
-            IntentFilter(android.net.ConnectivityManager.CONNECTIVITY_ACTION)
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         )
     }
 
@@ -158,14 +179,7 @@ class WeatherShowFragment : Fragment() {
                 Snackbar.make(binding.mainView, "Success", Snackbar.LENGTH_LONG).show()
             }
 
-            is AppState.ShowMapOn -> {
-                requireActivity().supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.container, GoogleMapFragment.newInstance(LatLng(state.lat,state.lon)))
-                    .addToBackStack("")
-                    .commit()
 
-            }
             is AppState.ReceivedCityListSuccess -> {
                 updateCityList(state.cityList)
                 binding.progress.visibility = View.GONE

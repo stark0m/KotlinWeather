@@ -10,4 +10,6 @@ interface ViewModelInterface {
     fun tryToShowGeocoder()
     fun addCityToCurrentList(weather: Weather)
     fun openGoogleMap(lat: Double, lon: Double)
+    fun tryToShowLocaleLocation()
+
 }
