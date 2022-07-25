@@ -28,9 +28,8 @@ import kotlinx.coroutines.launch
 class WeatherShowViewModel(
     application: Application,
 ) : AndroidViewModel(application), ViewModelInterface {
-    private var repository: RepositoryRemoteRetrofitImpl? = RepositoryRemoteRetrofitImpl()
 
-    //    private var repository: Repository? = null
+        private var repository: Repository? = null
     private lateinit var cityListRepository: CityListRepository
     private lateinit var cityListTabNameEnum: CityListEnum
     private val context = getApplication<Application>().applicationContext

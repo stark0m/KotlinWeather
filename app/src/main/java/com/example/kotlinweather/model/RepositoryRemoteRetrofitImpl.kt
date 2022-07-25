@@ -32,7 +32,7 @@ class RepositoryRemoteRetrofitImpl : Repository {
             dateUpdated = forecast.date
         )
 
-   suspend fun getDirectWeather(lat: Double,
+   override suspend fun getDirectWeather(lat: Double,
                          lon: Double,
                          cityName: String):Weather? =
         retrofitBuilder.getWeather(BuildConfig.WEATHER_API_KEY, lat, lon)
@@ -43,80 +43,6 @@ class RepositoryRemoteRetrofitImpl : Repository {
             ?:throw IOException("Retrofit return noSuccess result")
 
 
-    override fun getWeather(
-        lat: Double,
-        lon: Double,
-        cityName: String,
-        weather: WeatherCallBack<Weather?>
-    ) {
-
-        /*  retrofitBuilder.getWeather(BuildConfig.WEATHER_API_KEY, lat, lon)
-              .enqueue(object : retrofit2.Callback<WeatherDTO> {
-                  override fun onFailure(call: retrofit2.Call<WeatherDTO>, t: Throwable) {
-                      sendBackError(t.message.toString(), weather)
-                  }
-
-                  override fun onResponse(
-                      call: retrofit2.Call<WeatherDTO>,
-                      serverResponce: retrofit2.Response<WeatherDTO>
-                  ) {
-                      val responce = serverResponce.body()
-                      if (!serverResponce.isSuccessful){
-                          sendBackError("server error code=${serverResponce.code()}", weather)
-                      }
-                      if (responce != null) {
-                          val weatherReceived = Weather(
-                              city = City(cityName, lat, lon),
-                              temperature = responce.fact.temp,
-                              feelsLike = responce.fact.feels_like,
-                              icon = responce.fact.icon,
-                              dateUpdated = responce.forecast.date
-                          )
-                          weather.onDataReceived(weatherReceived)
-                      } else {
-                          sendBackError("serverResponce.body()=null", weather)
-                      }
-                  }
-              })*/
-
-        Thread {
-            val result = retrofitBuilder.getWeather(BuildConfig.WEATHER_API_KEY, lat, lon)
-                .execute()
-                .takeIf { it.isSuccessful }
-                ?.body()
-                ?.toWather(City(cityName, lat, lon))
-
-
-            if (result!=null){
-                weather.onDataReceived(result)
-            }
-
-
-        }.start()
-
-
-    }
-
-
-//            ?.let{val weatherReceived = Weather(
-//                        city = City(cityName, lat, lon),
-//                        temperature = it.fact.temp,
-//                        feelsLike = it.fact.feels_like,
-//                        icon = it.fact.icon,
-//                        dateUpdated = it.forecast.date
-//                    )
-//                        weather.onDataReceived(weatherReceived)
-//
-//                    }
-
-
-
-
-private fun sendBackError(message: String, weather: WeatherCallBack<Weather?>) {
-    Log.e(RETROFIT_REPOSITORY, message)
-    weather.onDataReceived(null)
-
-}
 
 }
 
