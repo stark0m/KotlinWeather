@@ -135,23 +135,7 @@ class WeatherShowViewModel(
                 }
             }
         }
-        /*repository?.getWeather(
-            lat = weather.city.lat,
-            lon = weather.city.lon,
-            cityName = weather.city.name
 
-        ) { weatherFromRepository ->
-
-            cityListRepository.updateWether(weatherFromRepository)
-
-            weatherFromRepository?.let {
-                vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
-
-
-            }
-                ?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
-
-        }*/
     }
 
     override fun tryToShowGeocoder() {
