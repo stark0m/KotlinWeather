@@ -7,4 +7,9 @@ interface ViewModelInterface {
     fun tryToShowWeather(weather: Weather)
     fun getAnotherCityList()
     fun updateWeatherInfo(weather: Weather)
+    fun tryToShowGeocoder()
+    fun addCityToCurrentList(weather: Weather)
+    fun openGoogleMap(lat: Double, lon: Double)
+    fun tryToShowLocaleLocation()
+
 }

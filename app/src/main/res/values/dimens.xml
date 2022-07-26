@@ -11,5 +11,12 @@
     <dimen name="city_image_display_height">100dp</dimen>
     <dimen name="dp10">10dp</dimen>
     <dimen name="dp5">5dp</dimen>
+    <dimen name="dp100">100dp</dimen>
+    <dimen name="sp12">12sp</dimen>
+    <dimen name="sp10">10sp</dimen>
+    <dimen name="sp16">16sp</dimen>
+    <dimen name="float_add_city_button_margin">100dp</dimen>
+    <dimen name="dp24">24dp</dimen>
+    <dimen name="dp35">35dp</dimen>
 
 </resources>

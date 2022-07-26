@@ -5,12 +5,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class CityListEnum:Parcelable {
-    RUSSIAN,WORLD;
+    RUSSIAN,WORLD,CUSTOM;
     fun getNext() =
         when(this){
             RUSSIAN ->WORLD
-            WORLD -> RUSSIAN
-            else -> RUSSIAN
+            WORLD -> CUSTOM
+            CUSTOM -> RUSSIAN
+            else -> CUSTOM
         }
 
     companion object{
@@ -18,6 +19,7 @@ enum class CityListEnum:Parcelable {
             when (string) {
                 RUSSIAN.toString() -> RUSSIAN
                 WORLD.toString() -> WORLD
+                CUSTOM.toString() -> CUSTOM
                 else -> RUSSIAN
             }
     }

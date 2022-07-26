@@ -4,6 +4,7 @@ import android.util.Log
 import com.example.kotlinweather.domain.City
 import com.example.kotlinweather.domain.CityListEnum
 import com.example.kotlinweather.domain.Weather
+import com.example.kotlinweather.model.AppCallback
 import com.example.kotlinweather.model.WeatherCallBack
 
 class CityListRepositoryHardLocalImpl : CityListRepository {
@@ -15,6 +16,7 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
                 when(cityListEnum){
                     CityListEnum.RUSSIAN -> weatherList.onDataReceived(getRussianCities())
                     CityListEnum.WORLD -> weatherList.onDataReceived(getWorldCities())
+                    else -> {}
                 }
 
 
@@ -25,6 +27,14 @@ class CityListRepositoryHardLocalImpl : CityListRepository {
     override fun updateWether(weather: Weather?) {
 
         Log.i("LOCAL","updateWether")
+    }
+
+    override fun addLocation(
+        weather: Weather,
+        listEnum: CityListEnum,
+        callback: AppCallback<Boolean>
+    ) {
+        //empty
     }
 
 
