@@ -44,9 +44,11 @@
 
 
         <service android:name=".lesson6.WeatherService" />
+
         <service
             android:name=".lesson11.FCMService"
-            android:exported="true">
+            android:exported="true"
+            android:enabled="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
