@@ -8,6 +8,17 @@ plugins {
 
 apply plugin: 'kotlin-kapt'
 android {
+    signingConfigs {
+        second {
+            Properties properties = new Properties()
+            properties.load(rootProject.file("local.properties").newDataInputStream())
+            storeFile file("second")
+            storePassword = "123456"
+            keyAlias 'alias'
+            keyPassword ="123456"
+
+        }
+    }
     compileSdk 32
 
     defaultConfig {
@@ -30,6 +41,14 @@ android {
         it.buildConfigField "String", "WEATHER_API_KEY", apiKey
     }
     buildTypes {
+
+        second {
+            Properties properties1 = new Properties()
+            properties1.load(project.rootProject.file("apikey.properties").newDataInputStream())
+            def apiKey = properties1.getProperty("yandex_weather_api_key", "")
+            it.buildConfigField "String", "WEATHER_API_KEY", apiKey
+            signingConfig = signingConfigs.second
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

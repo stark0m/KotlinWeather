@@ -19,11 +19,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, WeatherShowFragment.newInstance()).commit()
         }
-//        StactiFun.makePushNotification(this,"title","mainactivity")
 
     }
-//cu0UCZ5qQJij6wubBVPqmd:APA91bGnZDQPyd-z5JYqxKLL0676pTrWQpMOY_QAib83bcdSR3YT3Z5BV23WxYlDVYcF9t_9dHEZAee6EUEB_Amcwc4j_DR29gxVMbbJJskTirn06bdjeDqScET8FnvHX61TvvV4XVUp
-//    AAAAF3WZ82Y:APA91bH4Gz5XxTewP9Xm2q3mekOXjlvYUJfTLmiMZjnnCjWwLMCCs-OdXssrFqHq7ekUnFTAiW7cVkRP6lf6ll0SypwLIIsYOZpdEFXV61T02oXOGucRot2k5lQOMEEdBhhgRXGrbx_e
-
 
 }
