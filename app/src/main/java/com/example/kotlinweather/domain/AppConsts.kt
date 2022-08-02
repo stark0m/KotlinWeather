@@ -2,6 +2,14 @@ package com.example.kotlinweather.domain
 
 import android.Manifest
 
+
+//FCM
+const val CHANNEL_ID_HIGHT= "CHANNEL_ID_HIGHT"
+const val NOTIFICATION_ID= 99
+
+const val NOTIFICATION_KEY_TITLE = "myTitle"
+const val NOTIFICATION_KEY_BODY = "myBody"
+
 const val BROADCAST_INTENT_FILTER = "BROADCAST_INTENT_FILTER"
 const val TAG_WEATHER_TO_SHOW = "TAG_WEATHER_TO_SHOW"
 const val WEATHET_DTO_KEY = "WEATHET_DTO_KEY"

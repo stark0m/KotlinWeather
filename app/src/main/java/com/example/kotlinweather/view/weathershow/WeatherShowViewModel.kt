@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.kotlinweather.domain.CITY_LIST_KEY_FILE_NAME
 import com.example.kotlinweather.domain.CURRENT_CITY_LIST_ENUM_NAME
 import com.example.kotlinweather.domain.CityListEnum
@@ -20,11 +21,15 @@ import com.example.kotlinweather.model.geocoder.RepositoreGeocoderImpl
 import com.example.kotlinweather.model.geocoder.RepositoryGeocoder
 import com.example.kotlinweather.viewmodel.AppState
 import com.example.kotlinweather.viewmodel.ViewModelInterface
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WeatherShowViewModel(
     application: Application,
 ) : AndroidViewModel(application), ViewModelInterface {
-    private var repository: Repository? = null
+
+        private var repository: Repository? = null
     private lateinit var cityListRepository: CityListRepository
     private lateinit var cityListTabNameEnum: CityListEnum
     private val context = getApplication<Application>().applicationContext
@@ -36,7 +41,7 @@ class WeatherShowViewModel(
     fun getGeocoder() = geocoderRepository
 
 
-    fun isOnline(context:Context):Boolean {
+    fun isOnline(context: Context): Boolean {
 
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.getActiveNetworkInfo();
@@ -117,23 +122,20 @@ class WeatherShowViewModel(
         chooseRepository()
         chooseCityListRepository()
         vmLiveData.value = AppState.Loading
-        repository?.getWeather(
-            lat = weather.city.lat,
-            lon = weather.city.lon,
-            cityName = weather.city.name
 
-        ) { weatherFromRepository ->
-
-            cityListRepository.updateWether(weatherFromRepository)
-
-            weatherFromRepository?.let {
-                vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
-
-
+        viewModelScope.launch(Dispatchers.IO + CoroutineName("GetDataFromRepo")) {
+            repository?.let {
+                it.getDirectWeather(
+                    lat = weather.city.lat,
+                    lon = weather.city.lon,
+                    cityName = weather.city.name
+                )?.let {
+                    vmLiveData.postValue(AppState.UpdateWeatherInfo(it))
+                    cityListRepository.updateWether(it)
+                }
             }
-                ?: vmLiveData.postValue(AppState.Error(NullPointerException("получен Null от сервера - вероятно нет доступа в интернет")))
-
         }
+
     }
 
     override fun tryToShowGeocoder() {
@@ -141,7 +143,7 @@ class WeatherShowViewModel(
     }
 
     override fun addCityToCurrentList(weather: Weather) {
-        cityListRepository.addLocation(weather,cityListTabNameEnum){result->
+        cityListRepository.addLocation(weather, cityListTabNameEnum) { result ->
             if (result) {
                 tryToreceiveCityList()
             }
@@ -149,7 +151,7 @@ class WeatherShowViewModel(
     }
 
     override fun openGoogleMap(lat: Double, lon: Double) {
-        vmLiveData.postValue(AppState.ShowMapOn(lat,lon))
+        vmLiveData.postValue(AppState.ShowMapOn(lat, lon))
     }
 
     override fun tryToShowLocaleLocation() {
@@ -171,7 +173,7 @@ class WeatherShowViewModel(
 //            RepositoryRemoteOkHttp3Impl()
             RepositoryRemoteRetrofitImpl()
         } else {
-            RepositoryLocalImpl()
+            RepositoryRemoteRetrofitImpl()
         }
     }
 
